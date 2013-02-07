@@ -1,4 +1,4 @@
 .DS_Store
 app/resources/tmp/*
-app/scripts/*/tmp/*
+app/scripts/import/*/tmp/*
 .*.sw[op]
