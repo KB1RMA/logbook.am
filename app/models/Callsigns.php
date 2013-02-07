@@ -9,7 +9,10 @@ class Callsigns extends \lithium\data\Model {
 	}
 	
 	public function fullAddress( $entity ) {
-		return $entity->street_address . ' ' . $entity->city . ' ' . $entity->state;
+
+		$street_address = ( empty( $entity->po_box ) ? $entity->street_address : 'PO Box ' . $entity->po_box );
+
+		return $street_address . ' ' . $entity->city . ' ' . $entity->state;
 	}
 
 	public function getLatitude( $entity ) {
