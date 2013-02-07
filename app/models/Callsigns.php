@@ -39,7 +39,7 @@ class Callsigns extends \lithium\data\Model {
 		
 			$geocode = $geocoder
 										->registerProvider(new \Geocoder\Provider\GoogleMapsProvider($adapter))
-										->geocode($full_address);
+										->geocode($entity->fullAddress());
 			
 			$entity->latitude = $geocode->getLatitude();
 			$entity->longitude = $geocode->getLongitude();

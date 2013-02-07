@@ -1,6 +1,7 @@
 <div class="main-content callProfile">
 <?php if ( $callsign ) : ?>
 	<div id="map_canvas"></div>	
+	<div id="use-my-location" title="Enable your location on the map">My Location</div>
 	<div class="profile-content">
 		<dl>
 			<dt>Callsign: </dt>

@@ -11,7 +11,9 @@ if (!$.support.transition)
 	
 	var $ = window.jQuery, 
 			$body = $('body'),
-			map_canvas = document.getElementById("map_canvas");
+			map_canvas = document.getElementById("map_canvas"),
+			logbookUserSettings = {},
+			bounds = '';
 
 	/**
 	 * Grab results from the Callsigns::autocomplete controller
@@ -90,6 +92,20 @@ if (!$.support.transition)
 		resizeCallSearch();
 	}
 	
+	function placeUserOnMap() {
+		if ( logbookUserSettings.latitude === undefined ) {
+			if(navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition( function(position) {
+					console.log(position.coords);
+					var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+					var marker = new google.maps.Marker({ map : map, position : latLng });	
+					bounds.extend(latLng);
+					map.fitBounds(bounds);
+				});
+			}
+		}
+	}
+
 	/**
 	 * Initialize various pieces on page load
 	 */
@@ -99,8 +115,9 @@ if (!$.support.transition)
 		var $body = $('body'),
 				$callsignInput = $('#callsign-input'),
 				$callsignFind = $('#callsign-find'),
-				$resultsContainer = $('#callsign-results');
-				$callSearch = $('#call-search');
+				$resultsContainer = $('#callsign-results'),
+				$callSearch = $('#call-search'),
+				$useMyLocation = $('#use-my-location');
 
 		// Every time a key is released on the callsign input, autocomplete the results
 		$body.on('keyup', '#callsign-input', function() { 
@@ -126,6 +143,13 @@ if (!$.support.transition)
 		// When callsign input gains focus, populate results if it's not empty
 		$callsignInput.focus(function() { autoComplete( this.value ); });
 
+		// Enable location button if the BROWSER-EXPERIENCE is adequate (looking at you, Scotty)
+		if(navigator.geolocation) {
+			$useMyLocation
+				.addClass('enabled')
+				.click( function (event) { placeUserOnMap(); $(this).addClass('active'); event.preventDefault(); });
+		}
+		
 	}
 
 
@@ -150,7 +174,10 @@ if (!$.support.transition)
 			
 			// Set marker
 			var marker = new google.maps.Marker({ map : map, position : latLng });	
-
+			
+			// add marker to Maps bounds
+			bounds = new google.maps.LatLngBounds();
+			bounds.extend(latLng);
 	 }
 
 	/**

@@ -94,7 +94,10 @@ class CallsignsController extends \lithium\action\Controller {
 				)) 
 		);
 
-		$this->render(array('type' => 'json', 'data' => compact('callsigns')));
+		$this->render(array(
+			'type' => 'json',
+			'data' => compact('callsigns')
+		));
 		
 	}
 
