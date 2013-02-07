@@ -30,17 +30,22 @@ class Callsigns extends \lithium\data\Model {
 	}
 
 	public function geocode( $entity ) {
-		$geocoder = new \Geocoder\Geocoder();
-		$adapter  = new \Geocoder\HttpAdapter\CurlHttpAdapter();
 		
-		$geocode = $geocoder
-									->registerProvider(new \Geocoder\Provider\GoogleMapsProvider($adapter))
-									->geocode($entity->fullAddress());
+		$full_address = trim($entity->fullAddress());
+
+		if ( !empty($full_address) ) {	
+			$geocoder = new \Geocoder\Geocoder();
+			$adapter  = new \Geocoder\HttpAdapter\CurlHttpAdapter();
 		
-		$entity->latitude = $geocode->getLatitude();
-		$entity->longitude = $geocode->getLongitude();
-		
-		$entity->save();
+			$geocode = $geocoder
+										->registerProvider(new \Geocoder\Provider\GoogleMapsProvider($adapter))
+										->geocode($full_address);
+			
+			$entity->latitude = $geocode->getLatitude();
+			$entity->longitude = $geocode->getLongitude();
+			
+			$entity->save();
+		}
 	}
 
 }

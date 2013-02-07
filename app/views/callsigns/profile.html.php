@@ -15,6 +15,8 @@
 				<dd><span id="mapLat"><?=$callsign->getLatitude()?></span></dd>	
 			<dt>Longitude: </dt>
 				<dd><span id="mapLng"><?=$callsign->getLongitude()?></span></dd>	
+			<dt>LoTW</dt>
+				<dd><?= $callsign->lotw_last_active ?></dd>
 		</dl>
 	</div>
 
