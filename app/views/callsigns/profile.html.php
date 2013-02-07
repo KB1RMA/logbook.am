@@ -9,6 +9,8 @@
 				<dd><?= $callsign->fullName() ?></dd>
 			<dt>Full Addy: </dt>
 				<dd><?= $callsign->fullAddress() ?></dd>
+			<dt>License Class</dt>
+				<dd><?= $callsign->license_class ?></dd>
 			<dt>Latitude: </dt>
 				<dd><span id="mapLat"><?=$callsign->getLatitude()?></span></dd>	
 			<dt>Longitude: </dt>

@@ -1,4 +1,4 @@
 .DS_Store
 app/resources/tmp/*
-scripts/*/tmp/*
+app/scripts/*/tmp/*
 .*.sw[op]

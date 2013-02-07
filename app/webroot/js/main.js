@@ -44,8 +44,6 @@ if (!$.support.transition)
 				resultRows = '',
 				anchorTag	= '';
 
-		console.log(results);
-
 		// Loop through results		
 		$.each(results.callsigns, function(i, result) {
 			anchorTag = '<a href="/call/' + result.callsign + '/">';		
