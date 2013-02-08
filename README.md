@@ -3,18 +3,3 @@
 </a>
 
 Callsign lookup for the modern era.
-
-## Features
-
-+ Callsign lookup
-+ Other stuff
-
-## Authors
-
-Peeps Go Here!
-
-## Other Information
-
-Hi, Poka
-
-I like Turtles!
