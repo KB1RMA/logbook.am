@@ -11,9 +11,20 @@ if (!$.support.transition)
 	
 	var $ = window.jQuery, 
 			$body = $('body'),
-			map_canvas = document.getElementById("map_canvas"),
-			logbookUserSettings = {},
-			bounds = '';
+			$resultsTable = null,
+			$resultsContainer = null,
+			$callsignInput = null,
+			$callsignFind = null,
+			$searchContainer = null,
+			$callSearchContainer = null,
+			map_canvas = null,
+			elevation_profile = null,
+			polyline = null,
+			logbookUserSettings = {}, // Eventually to be used with user specific settings
+			callsignInformation = {}, 
+			bounds = null,
+			chart = null,
+			elevation = null;
 
 	/**
 	 * Grab results from the Callsigns::autocomplete controller
@@ -38,11 +49,7 @@ if (!$.support.transition)
 	 */
 
 	function populateAutoCompleteResults ( results ) {
-		var $resultsContainer = $('#callsign-results'),
-				$resultsTable = $('#callsign-results table'),
-				$searchContainer = $('#callsign-entry'),
-				$callSearchContainer = $('#call-search'),
-				i = 0,
+		var i = 0,
 				resultRows = '',
 				anchorTag	= '';
 
@@ -60,6 +67,7 @@ if (!$.support.transition)
 				
 				// Reach out to the big bad DOM to populate the results
 				$(this).html(resultRows); 
+
 				
 				resizeCallSearch(function() { 
 					$resultsContainer.fadeIn(300);
@@ -70,20 +78,13 @@ if (!$.support.transition)
 	}
 
 	function resizeCallSearch( callback ) {
-		var $callSearchContainer = $('#call-search'),
-				$resultsContainer = $('#callsign-results'),
-				$resultsTable = $('#callsign-results table'),
-				$searchContainer = $('#callsign-entry'),
-				containerHeight = $searchContainer.outerHeight() + $resultsTable.outerHeight();
+		var containerHeight = $searchContainer.outerHeight() + $resultsTable.outerHeight();
 		
 		$callSearchContainer.transition( { 'height' : containerHeight }, 100, callback );
 
 	}
 
 	function closeResultsContainer() {
-		var	$resultsTable = $('#callsign-results table'),
-				$resultsContainer = $('#callsign-results');
-
 		$resultsTable.empty();
 
 		if ( ! $body.hasClass('home') )
@@ -92,19 +93,96 @@ if (!$.support.transition)
 		resizeCallSearch();
 	}
 	
-	function placeUserOnMap() {
-		if ( logbookUserSettings.latitude === undefined ) {
-			if(navigator.geolocation) {
+	function placeUserOnMap( callback ) {
+		if ( logbookUserSettings.latLng === undefined ) {
+			if ( navigator.geolocation ) {
 				navigator.geolocation.getCurrentPosition( function(position) {
-					console.log(position.coords);
-					var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-					var marker = new google.maps.Marker({ map : map, position : latLng });	
-					bounds.extend(latLng);
+					logbookUserSettings.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+					var marker = new google.maps.Marker({ map : map, position : logbookUserSettings.latLng });	
+
+					// Put a line on the map between user and callsign
+					if (polyline) 
+						polyline.setMap(null);
+					
+					polyline = new google.maps.Polyline({
+						path: [ logbookUserSettings.latLng, callsignInformation.latLng ],
+						strokeColor: "#000000",
+						map: map});
+
+					// Zoom the map out to show user and callsign
+					bounds.extend(logbookUserSettings.latLng);
 					map.fitBounds(bounds);
+					setTimeout(callback, 200 );
 				});
 			}
 		}
 	}
+
+
+	/**
+	 * Load the Visualization API and the piechart package.
+	 */
+	function loadVisualizations( callback ) {
+		  google.load("visualization", "1", {
+				callback : callback,
+				packages: ["columnchart"]
+			});
+	}
+
+	/**
+	 * Elevation profile between user location and callsign
+	 */
+
+	function createElevationProfile() {
+
+		if ( google.visualization === undefined ) {
+			loadVisualizations( createElevationProfile );
+			return; 
+		}
+
+		chart = new google.visualization.ColumnChart(elevation_profile);
+		elevationService = new google.maps.ElevationService();
+
+		// combine user and callsign latLng objects
+		
+		if ( logbookUserSettings.latLng === undefined ) {
+			if ( confirm('We need your location. Would you like to find it now?') )
+				placeUserOnMap(createElevationProfile);
+
+			return;
+		}
+		
+		var latLngs = [ logbookUserSettings.latLng, callsignInformation.latLng ];
+
+		elevationService.getElevationAlongPath({
+			path: latLngs,
+			samples: 256
+		}, plotElevation);
+	}
+	
+	/**
+	 * Takes an array of ElevationResult objects, draws the path on the map
+	 * and plots the elevation profile on a GViz ColumnChart
+	 */
+
+  function plotElevation(results) {
+		elevations = results;
+   	 
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Sample');
+    data.addColumn('number', 'Elevation');
+    for (var i = 0; i < results.length; i++) {
+      data.addRow(['', elevations[i].elevation]);
+    }
+
+    elevation_profile.style.display = 'block';
+    chart.draw(data, {
+      height: 200,
+      legend: 'none',
+      titleY: 'Elevation (m)',
+      focusBorderColor: '#00ff00'
+    });
+  }
 
 	/**
 	 * Initialize various pieces on page load
@@ -112,12 +190,17 @@ if (!$.support.transition)
 
 	function init() {
 
-		var $body = $('body'),
-				$callsignInput = $('#callsign-input'),
-				$callsignFind = $('#callsign-find'),
-				$resultsContainer = $('#callsign-results'),
-				$callSearch = $('#call-search'),
-				$useMyLocation = $('#use-my-location');
+		$body = $('body');
+		$resultsTable = $('#callsign-results table');
+		$resultsContainer = $('#callsign-results');
+		$callsignInput = $('#callsign-input');
+		$callsignFind = $('#callsign-find');
+		$searchContainer = $('#callsign-entry');
+		$callSearchContainer = $('#call-search');
+		map_canvas = document.getElementById("map_canvas");
+		elevation_profile = document.getElementById("elevation_profile");
+
+		var $useMyLocation = $('#use-my-location');
 
 		// Every time a key is released on the callsign input, autocomplete the results
 		$body.on('keyup', '#callsign-input', function() { 
@@ -149,6 +232,8 @@ if (!$.support.transition)
 				.addClass('enabled')
 				.click( function (event) { placeUserOnMap(); $(this).addClass('active'); event.preventDefault(); });
 		}
+
+		$('#show-elevation-profile').click(function() { createElevationProfile(); return false; });
 		
 	}
 
@@ -161,11 +246,13 @@ if (!$.support.transition)
 			
 			// Find lat and lng on the page so we know where to center the map
 			var lat = document.getElementById("mapLat").innerHTML,
-					lng = document.getElementById("mapLng").innerHTML,
-					latLng = new google.maps.LatLng(lat, lng),
-					mapOptions = {
+					lng = document.getElementById("mapLng").innerHTML;
+
+			callsignInformation.latLng = new google.maps.LatLng(lat, lng);
+
+			var	mapOptions = {
 						zoom: 10,
-						center: latLng,
+						center: callsignInformation.latLng,
 						mapTypeId: google.maps.MapTypeId.ROADMAP
 					};
 
@@ -173,11 +260,11 @@ if (!$.support.transition)
 			map = new google.maps.Map(map_canvas, mapOptions);
 			
 			// Set marker
-			var marker = new google.maps.Marker({ map : map, position : latLng });	
+			var marker = new google.maps.Marker({ map : map, position : callsignInformation.latLng });	
 			
 			// add marker to Maps bounds
 			bounds = new google.maps.LatLngBounds();
-			bounds.extend(latLng);
+			bounds.extend(callsignInformation.latLng);
 	 }
 
 	/**
@@ -188,7 +275,7 @@ if (!$.support.transition)
 
 		init();	
 
-		// Initialize Google Maps API if there is a map_canvas element on the page
+		// Initialize Google Maps and visualization API if there is a map_canvas element on the page
 		if ( typeof(map_canvas) != 'undefined' && map_canvas != null ) {
 			google.load("maps", "3", {
 				callback : mapInit,

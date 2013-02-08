@@ -1,6 +1,8 @@
 <div class="main-content callProfile">
 <?php if ( $callsign ) : ?>
 	<div id="map_canvas"></div>	
+	<a href="javascript:;" id="show-elevation-profile">Elevation Profile</a>
+	<div id="elevation_profile"></div>
 	<div id="use-my-location" title="Enable your location on the map">My Location</div>
 	<div class="profile-content">
 		<dl>
@@ -24,4 +26,3 @@
 <?php else : ?>
 <p><?= $requestedCall ?> not found!</p>
 <?php endif ?>
-</div>
