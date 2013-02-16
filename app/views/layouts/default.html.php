@@ -24,34 +24,22 @@
 
 				<header>
 					<div class="header-container centered clearfix">
-					<?php if ( !isset($isHome) ) : ?>
-						<div id="call-search">
-						<?= $this->form->create( null, array( 
-							'url' => array( 
-								'controller' 	=> 'callsigns', 
-								'action' 			=> 'profile' ), 
-							'method' 	=> 'POST',
-							'id' 	=> 'callsign-entry' 
-						)) ?>
-							<?= $this->form->text('callsign', array('id' => 'callsign-input', 'autocomplete' => 'off')) ?>
-						<?= $this->form->end() ?>
-							<div id="callsign-results">
-								<table>
-								
-								</table>
-							</div>
-						</div>
-					<?php endif ?>
-					<div id="clock" class="right"><?= gmdate("H:i:s", time());?> UTC</div>
+					<?php if ( !isset($isHome) ) : echo $this->_render('element', 'callsigninput'); endif ?>
+						<a id="user-settings" class="right ir" title="User Settings"></a>
+						<div id="clock" class="right"><?= gmdate("H:i:s", time());?> UTC</div>
+					</div>
+					<div id="user-settings-dropdown">
+						<?= $this->_render('element', 'usersettings') ?>
 					</div>
 				</header>
 
 				<div id="main-container">
 
 				<?php echo $this->content(); ?>
+
 				</div>
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
         <script type="text/javascript" src="//www.google.com/jsapi"></script>
 				<script src="/js/plugins.js"></script>

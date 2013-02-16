@@ -17,14 +17,80 @@ if (!$.support.transition)
 			$callsignFind = null,
 			$searchContainer = null,
 			$callSearchContainer = null,
+			$userSettingsDropdown = null,
+			$useMyLocation = null,
 			map_canvas = null,
 			elevation_profile = null,
 			polyline = null,
-			logbookUserSettings = {}, // Eventually to be used with user specific settings
 			callsignInformation = {}, 
 			bounds = null,
 			chart = null,
 			elevation = null;
+
+	/**
+	 * Object to save and retrieve various user preferences
+	 */
+
+	var userPreferences = {
+		$form : null,
+		latLng : null,
+		prefix : 'logbook_',
+		settings : {},
+
+		init : function() {
+			this.bindToForm();
+			// Retrieve default settings to populate settings object 
+			this.retrieveSettings();
+			// load settings from localStorage and populate form
+			this.load();
+			this.updateSettings();
+		},
+
+		bindToForm : function() {
+			this.$form = $('#settings-list');
+			this.$form.find('input').change(function() { 
+				userPreferences.retrieveSettings();	
+				userPreferences.save();	
+			});
+		},
+
+		load : function() {
+			for ( var setting in this.settings ) {
+				userPreferences.settings[setting] = window.localStorage.getItem( this.prefix + setting );
+			}
+			return this.settings;
+		},
+
+		save : function() {
+			for ( var setting in this.settings ) {
+				window.localStorage.setItem( userPreferences.prefix + setting, userPreferences.settings[setting] );	
+			}
+			console.log(this.settings);
+		},
+
+		retrieveSettings : function() {
+			var settings = new Object;
+			this.$form.find(':input').each( function() {
+				$element = $(this);
+				if ( $element.is(':checked') )
+					settings[$element.attr('name')] = $element.val();
+				else 
+					settings[$element.attr('name')] = 0;
+			});
+			this.settings = settings;
+		},
+
+		updateSettings : function() {
+			for ( var setting in this.settings ) {
+				$element = userPreferences.$form.find('[name="' + setting + '"]');
+				if ( userPreferences.settings[setting] !== "0"  )
+					$element.attr('checked', true);
+				else 
+					$element.attr('checked', false);
+			}
+		}
+
+	}
 
 	/**
 	 * Grab results from the Callsigns::autocomplete controller
@@ -94,28 +160,27 @@ if (!$.support.transition)
 	}
 	
 	function placeUserOnMap( callback ) {
-		if ( logbookUserSettings.latLng === undefined ) {
 			if ( navigator.geolocation ) {
 				navigator.geolocation.getCurrentPosition( function(position) {
-					logbookUserSettings.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-					var marker = new google.maps.Marker({ map : map, position : logbookUserSettings.latLng });	
+					userPreferences.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+					var marker = new google.maps.Marker({ map : map, position : userPreferences.latLng });	
 
 					// Put a line on the map between user and callsign
 					if (polyline) 
 						polyline.setMap(null);
 					
 					polyline = new google.maps.Polyline({
-						path: [ logbookUserSettings.latLng, callsignInformation.latLng ],
+						path: [ userPreferences.latLng, callsignInformation.latLng ],
 						strokeColor: "#000000",
 						map: map});
 
 					// Zoom the map out to show user and callsign
-					bounds.extend(logbookUserSettings.latLng);
+					bounds.extend(userPreferences.latLng);
 					map.fitBounds(bounds);
 					setTimeout(callback, 200 );
 				});
 			}
-		}
+		$useMyLocation.addClass('active');
 	}
 
 
@@ -145,14 +210,14 @@ if (!$.support.transition)
 
 		// combine user and callsign latLng objects
 		
-		if ( logbookUserSettings.latLng === undefined ) {
+		if ( userPreferences.latLng === undefined || userPreferences.latLng === null ) {
 			if ( confirm('We need your location. Would you like to find it now?') )
 				placeUserOnMap(createElevationProfile);
 
 			return;
 		}
 		
-		var latLngs = [ logbookUserSettings.latLng, callsignInformation.latLng ];
+		var latLngs = [ userPreferences.latLng, callsignInformation.latLng ];
 
 		elevationService.getElevationAlongPath({
 			path: latLngs,
@@ -185,6 +250,30 @@ if (!$.support.transition)
   }
 
 	/**
+	 * Open and close settings dropdown
+	 */
+
+	function toggleSettingsDropdown() {
+		var dropdown_height = $userSettingsDropdown.outerHeight();
+
+		if ( !$userSettingsDropdown.hasClass('opened') ) {
+			$userSettingsDropdown
+				.css( { top : dropdown_height * -1 })
+				.transition( { top : '50px' }, 300, function() { 
+						$(this).bind('clickoutside', function() { toggleSettingsDropdown() }); 
+				})
+				.addClass('opened');
+		} else {
+			$userSettingsDropdown
+				.transition( { top : dropdown_height * -1 })
+				.removeClass('opened')
+				.unbind('clickoutside');
+		}
+		
+	}
+
+
+	/**
 	 * Initialize various pieces on page load
 	 */
 
@@ -197,11 +286,16 @@ if (!$.support.transition)
 		$callsignFind = $('#callsign-find');
 		$searchContainer = $('#callsign-entry');
 		$callSearchContainer = $('#call-search');
+		$userSettingsDropdown = $('#user-settings-dropdown');
+		$userSettings = $('#user-settings');
 		map_canvas = document.getElementById("map_canvas");
 		elevation_profile = document.getElementById("elevation_profile");
+		$useMyLocation = $('#use-my-location');
 
-		var $useMyLocation = $('#use-my-location');
-
+		// Bind settings dropdown and settings object
+		$userSettings.click( function() { toggleSettingsDropdown() } );
+		userPreferences.init();
+		
 		// Every time a key is released on the callsign input, autocomplete the results
 		$body.on('keyup', '#callsign-input', function() { 
 			var val = this.value;
@@ -228,13 +322,16 @@ if (!$.support.transition)
 
 		// Enable location button if the BROWSER-EXPERIENCE is adequate (looking at you, Scotty)
 		if(navigator.geolocation) {
-			$useMyLocation
-				.addClass('enabled')
-				.click( function (event) { placeUserOnMap(); $(this).addClass('active'); event.preventDefault(); });
+			$useMyLocation.addClass('enabled');
+
+			if ( ! userPreferences.settings['use-location'] )
+				$useMyLocation.click( function (event) { placeUserOnMap(); event.preventDefault(); 	});
+	
 		}
 
 		$('#show-elevation-profile').click(function() { createElevationProfile(); return false; });
 		
+
 	}
 
 
@@ -265,7 +362,11 @@ if (!$.support.transition)
 			// add marker to Maps bounds
 			bounds = new google.maps.LatLngBounds();
 			bounds.extend(callsignInformation.latLng);
-	 }
+
+			if ( userPreferences.settings['use-location'] !== "0" ) 
+				placeUserOnMap();
+			
+		}
 
 	/**
 	 * Document on ready
