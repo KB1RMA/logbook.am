@@ -21,10 +21,4 @@ sed -i 's/,/","/g;s/^/"/;s/$/"/' $TMPCSV
 sed -i "1i${HEADER}" $TMPCSV
 
 # Update callsigns with LoTW info
-mongoimport --db lookup_callsigns \
-	--collection callsigns \
-	--type csv \
-	--headerline \
-	--file $TMPCSV \
-	--upsert \
-	--upsertFields callsign
+li3 csv_import --file=$TMPCSV 

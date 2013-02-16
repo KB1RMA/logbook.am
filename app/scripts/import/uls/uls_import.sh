@@ -19,11 +19,5 @@ python uls_parse.py > $TMPCSV
 # Add header to the file
 sed -i "1i${HEADER}" $TMPCSV
 
-mongoimport --db lookup_callsigns \
-	--collection callsigns \
-	--type csv \
-	--headerline \
-	--file $TMPCSV \
-	--upsert \
-	--upsertFields callsign
+li3 csv_import --file=$TMPCSV 
 
