@@ -21,7 +21,7 @@
 			<dt>LOTW Active?</dt>
 				<dd><?= $callsign->lotwIsActive() ?></dd>	
 			<?php if (!empty($callsign->lotw_last_active)) :?>
-			<dt>Last Seen on LOTW</dt>
+			<dt>Last Upload to LOTW</dt>
 				<dd>
 					<?= date('M d, Y', $callsign->lotw_last_active->sec) ?>
 				</dd>
