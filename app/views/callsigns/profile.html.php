@@ -18,8 +18,14 @@
 				<dd><span id="mapLat"><?=$callsign->getLatitude()?></span></dd>	
 			<dt>Longitude: </dt>
 				<dd><span id="mapLng"><?=$callsign->getLongitude()?></span></dd>	
-			<dt>LoTW</dt>
-				<dd><?= $callsign->lotw_last_active ?></dd>
+			<dt>LOTW Active?</dt>
+				<dd><?= $callsign->lotwIsActive() ?></dd>	
+			<?php if (!empty($callsign->lotw_last_active)) :?>
+			<dt>Last Seen on LOTW</dt>
+				<dd>
+					<?= date('M d, Y', $callsign->lotw_last_active->sec) ?>
+				</dd>
+			<?php endif ?>
 		</dl>
 	</div>
 

@@ -46,6 +46,8 @@ class CsvImport extends \lithium\console\Command {
 
 			$this->header("Importing $linecount records from $this->file");
 
+			$previousPercent = 0;
+
 			// Begin the progress indicator
 			echo "Progress :      ";  
 
@@ -67,44 +69,41 @@ class CsvImport extends \lithium\console\Command {
 				// Create a callsign model for the row, set parameters, then save it
 				if ( $row != 1 ) {
 					
-					try {
-						// See if the call exists in the database
-						$callsign = Callsigns::first(array(
-							'conditions' => array(
-								'callsign' => strtoupper($data[$callsignIndex])
-								)
-							));
+					// Add properties to the document corresponding to each column in the CSV
+					$num = count($data);				
 
-						// If the call isn't already in the database, create a new record
-						if ( !count($callsign) ) {
-							$callsign = Callsigns::create();
-							$newrecords++;
-						} else {
-							$updates++;
-						}
-
-						// Add properties to the record corresponding to each column in the CSV
-						$num = count($data);				
-						for ( $c=0; $c < $num; $c++) {
+					for ( $c=0; $c < $num; $c++) {
+						// Skip callsign
+						if ( $c != $callsignIndex ) {
 							if ( !empty($header[$c]) )
 								$callsign[$header[$c]] = $data[$c];
-						}
+						}	
+					}
+					
+					$criteria = array('callsign' => strtoupper($data[$callsignIndex]));
+					$options = array('upsert' => true);					
+					$document = array('$set' => $callsign);
+					
+					try {
 
-						// Check if this is a successful save or a failure
-						if ( $callsign->save() )
+						if ( Callsigns::update($document, $criteria, $options) )
 							$successes++;
 
-					} catch(Exception $e) {
-						// Not catching any errors for the moment. Just supressing them
+					} catch (Exception $e) {
+
 						$failures++;
+
 					}
 
 					// Output a percentage complete
 					$percentComplete = number_format( ($row / $linecount ) * 100, 0 );
 
 					// Remove last 5 characters outputted and re output so we update the percent complete
-					echo "\033[5D";
-					echo str_pad($percentComplete, 3, ' ', STR_PAD_LEFT) . " %";
+					if ( $percentComplete != $previousPercent ) {
+						echo "\033[5D";
+						echo str_pad($percentComplete, 3, ' ', STR_PAD_LEFT) . " %";
+						$previousPercent = $percentComplete;
+					}
 				}
 
 				$row++;
@@ -112,7 +111,7 @@ class CsvImport extends \lithium\console\Command {
 		
 			fclose($handle); // Close the file
 
-			$this->out("\n$updates records updated and $newrecords new records");
+			$this->out("\n$successes records affected");
 
 			if ( $failures )
 				$this->out("$failures failures");
