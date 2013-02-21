@@ -13,20 +13,23 @@
 			<dt>Full Addy: </dt>
 				<dd><?= $callsign->fullAddress() ?></dd>
 			<dt>License Class</dt>
-				<dd><?= $callsign->license_class ?></dd>
+				<dd><?= $callsign->uls->licenseClass ?></dd>
 			<dt>Latitude: </dt>
 				<dd><span id="mapLat"><?=$callsign->getLatitude()?></span></dd>	
 			<dt>Longitude: </dt>
 				<dd><span id="mapLng"><?=$callsign->getLongitude()?></span></dd>	
 			<dt>LOTW Active?</dt>
 				<dd><?= $callsign->lotwIsActive() ?></dd>	
-			<?php if (!empty($callsign->lotw_last_active)) :?>
+			<?php if (!empty($callsign->qslInfo->lotwLastActive)) :?>
 			<dt>Last Upload to LOTW</dt>
 				<dd>
-					<?= date('M d, Y', $callsign->lotw_last_active->sec) ?>
+					<?= date('M d, Y', $callsign->qslInfo->lotwLastActive->sec) ?>
 				</dd>
 			<?php endif ?>
 		</dl>
+	</div>
+	<div id="json-dump">
+		<?= json_encode($callsign->data()) ?>
 	</div>
 
 <?php else : ?>

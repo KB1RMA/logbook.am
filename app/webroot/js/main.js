@@ -123,8 +123,8 @@ if (!$.support.transition)
 		$.each(results.callsigns, function(i, result) {
 			anchorTag = '<a href="/call/' + result.callsign + '/">';		
 			resultRows += '<tr><td>' + anchorTag + result.callsign + '</a></td>';
-			resultRows += '<td>' + anchorTag + result.first_name + ' ' + result.last_name + '</a></td>';
-			resultRows += '<td>' + anchorTag + result.city + ', ' + result.state + '</a></td></tr>';
+			resultRows += '<td>' + anchorTag + result.person.givenName + ' ' + result.person.familyName + '</a></td>';
+			resultRows += '<td>' + anchorTag + result.address.locality + ', ' + result.address.region + '</a></td></tr>';
 		});
 		
 		// Fade results container out

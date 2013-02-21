@@ -7,7 +7,7 @@ STOREDIR=./tmp/
 LOTW=http://www.wd5eae.org/LoTW_Data.txt
 TMPCSV=./tmp/lotwforimport.csv
 
-HEADER=callsign,lotw_last_active
+HEADER=callsign,qslInfo.lotwLastActive
 
 wget -O $TMPCSV $LOTW
 

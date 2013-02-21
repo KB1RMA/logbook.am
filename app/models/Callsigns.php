@@ -6,32 +6,67 @@ class Callsigns extends \lithium\data\Model {
 
 	protected $_schema = array(
 		'_id' => array('type' => 'id'),
-		'lotw_last_active' => array('type' => 'date')
+		'callsign' => array('type' => 'string', 'null' => false),    
+    'person' => array('type' => 'object'),
+        'person.givenName' => array('type' => 'string', 'default' => 'test'),
+        'person.additionalName' => array('type' => 'string', 'default' => 'test'), 
+        'person.familyName' => array('type' => 'string'), 
+        'person.email' => array('type' => 'string'),
+        'person.birthDate' => array('type' => 'date'),
+        'person.website' => array('type' => 'string'),
+    'address' => array('type' => 'object'), 
+        'address.postOfficeBoxNumber' => array('type' => 'string'),
+        'address.streetAddress' => array('type' => 'string'),
+        'address.locality' => array('type' => 'string', 'default' => ''),
+        'address.region' => array('type' => 'string', 'default' => ''),
+        'address.country' => array('type' => 'string'),
+        'address.postalCode' => array('type' => 'integer'),
+    'geoCoordinates' => array('type' => 'object'),
+        'geoCoordinates.elevation' => array('type' => 'integer', 'default' => 0),
+        'geoCoordinates.latitude' => array('type' => 'float'),
+        'geoCoordinates.longitude' => array('type' => 'float'),
+        'geoCoordinates.gridSquare' => array('type' => 'string'),
+        'geoCoordinates.ituZone' => array('type' => 'integer'),
+        'geoCoordinates.cqZone' => array('type' => 'integer'),
+        'geoCoordinates.arrlSection' => array('type' => 'integer'),
+        'geoCoordinates.iota' => array('type' => 'integer'),
+        'geoCoordinates.source' => array('type' => 'string'),
+    'qslInfo' => array('type' => 'object'),
+        'qslInfo.lotwLastActive' => array('type' => 'date'),
+        'qslInfo.eQSL' => array('type' => 'string'),
+        'qslInfo.direct' => array('type' => 'boolean'),
+        'qslInfo.buro' => array('type' => 'boolean'),
+        'qslInfo.manager' => array('type' => 'boolean'),
+    'uls' => array('type' => 'object'),
+        'uls.fileNumber' => array('type' => 'integer'),
+        'uls.frn' => array('type' => 'integer'),
+        'uls.licenseClass' => array('type' => 'string'),
+    'personalBio' => array('type' => 'string'),
 	);
 
 	public function fullName( $entity ) {
-		return $entity->first_name . ' ' . $entity->mi . ' ' . $entity->last_name;	
+		return $entity->person->givenName . ' ' . $entity->person->additionalName . ' ' . $entity->person->familyName;
 	}
 	
 	public function fullAddress( $entity ) {
 
-		$street_address = ( empty( $entity->po_box ) ? $entity->street_address : 'PO Box ' . $entity->po_box );
+		$street_address = ( empty( $entity->address->postOfficeBoxNumber ) ? $entity->address->streetAddress : 'PO Box ' . $entity->address->PostOfficeBoxNumber );
 
-		return $street_address . ' ' . $entity->city . ' ' . $entity->state;
+		return $street_address . ' ' . $entity->address->locality . ' ' . $entity->address->region;
 	}
 
 	public function getLatitude( $entity ) {
-		if ( empty($entity->latitude) )
+		if ( empty($entity->geoCoordinates->latitude) )
 			$entity->geocode();
 
-		return $entity->latitude;
+		return $entity->geoCoordinates->latitude;
 	}
 
 	public function getLongitude( $entity ) {
-		if ( empty($entity->longitude) )
+		if ( empty($entity->geoCoordinates->longitude) )
 			$entity->geocode();
 
-		return $entity->longitude;
+		return $entity->geoCoordinates->longitude;
 	}
 
 	public function geocode( $entity ) {
@@ -45,20 +80,22 @@ class Callsigns extends \lithium\data\Model {
 			$geocode = $geocoder
 										->registerProvider(new \Geocoder\Provider\GoogleMapsProvider($adapter))
 										->geocode($entity->fullAddress());
-			
-			$entity->latitude  = $geocode->getLatitude();
-			$entity->longitude = $geocode->getLongitude();
-			
+
+			$entity->geoCoordinates = new \stdClass();	
+			$entity->geoCoordinates->latitude  = $geocode->getLatitude();
+			$entity->geoCoordinates->longitude = $geocode->getLongitude();
+			$entity->geoCoordinates->source    = 'Google Geocoding API';
+
 			$entity->save();
 		}
 	}
 
 	public function lotwIsActive( $entity ) {
 		
-		if ( empty($entity->lotw_last_active) )
+		if ( empty($entity->qslInfo->lotwLastActive) )
 			return 'No';
 
-		if ( $entity->lotw_last_active->sec < strtotime('-1 year') )
+		if ( $entity->qslInfo->lotwLastActive->sec < strtotime('-1 year') )
 			return 'No';
 				
 		return 'Yes';
