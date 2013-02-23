@@ -121,10 +121,19 @@ if (!$.support.transition)
 
 		// Loop through results		
 		$.each(results.callsigns, function(i, result) {
-			anchorTag = '<a href="/call/' + result.callsign + '/">';		
-			resultRows += '<tr><td>' + anchorTag + result.callsign + '</a></td>';
-			resultRows += '<td>' + anchorTag + result.person.givenName + ' ' + result.person.familyName + '</a></td>';
-			resultRows += '<td>' + anchorTag + result.address.locality + ', ' + result.address.region + '</a></td></tr>';
+			if ( result.person === undefined ) { result.person = {}; }
+			if ( result.address === undefined ) { result.address = {}; }
+
+			var callsign = result.callsign || '',
+			    givenName = result.person.givenName || '',
+			    familyName = result.person.familyName || '',
+			    locality = result.address.locality || '',
+			    region = result.address.region || '';
+
+			anchorTag = '<a href="/call/' + callsign + '/">';		
+			resultRows += '<tr><td>' + anchorTag + callsign + '</a></td>';
+			resultRows += '<td>' + anchorTag + givenName + ' ' + familyName + '</a></td>';
+			resultRows += '<td>' + anchorTag + locality + ', ' + region + '</a></td></tr>';
 		});
 		
 		// Fade results container out
