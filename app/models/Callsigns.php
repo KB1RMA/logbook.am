@@ -45,10 +45,15 @@ class Callsigns extends \lithium\data\Model {
 	);
 
 	public function fullName( $entity ) {
+		if ( empty($entity->person) )
+			return false;
+
 		return $entity->person->givenName . ' ' . $entity->person->additionalName . ' ' . $entity->person->familyName;
 	}
 	
 	public function fullAddress( $entity ) {
+		if ( empty($entity->address) )
+			return false;
 
 		$street_address = ( empty( $entity->address->postOfficeBoxNumber ) ? $entity->address->streetAddress : 'PO Box ' . $entity->address->PostOfficeBoxNumber );
 
@@ -56,6 +61,9 @@ class Callsigns extends \lithium\data\Model {
 	}
 
 	public function getLatitude( $entity ) {
+		if ( empty($entity->geoCoordinates) )
+			return false;
+
 		if ( empty($entity->geoCoordinates->latitude) )
 			$entity->geocode();
 
@@ -63,6 +71,9 @@ class Callsigns extends \lithium\data\Model {
 	}
 
 	public function getLongitude( $entity ) {
+		if ( empty($entity->geoCoordinates) )
+			return false;
+
 		if ( empty($entity->geoCoordinates->longitude) )
 			$entity->geocode();
 
@@ -99,6 +110,32 @@ class Callsigns extends \lithium\data\Model {
 			return 'No';
 				
 		return 'Yes';
+
+	}
+
+	public function gridSquare( $entity, $force = false ) {
+
+		if ( !empty($entity->geoCoordinates->gridSquare) && !$force )
+			return $entity->geoCoordinates->gridSquare;
+
+		$grid = '';
+		$lat  = $entity->getLatitude();
+		$lon = $entity->getLongitude();
+
+		$lat  = ($lat + 90);
+		$lon  = ($lon + 180);
+
+		$grid .= chr(ord('A') + intval($lon / 20));
+		$grid .= chr(ord('A') + intval($lat / 10));
+		$grid .= chr(ord('0') + intval(($lon % 20)/2));
+		$grid .= chr(ord('0') + intval(($lat % 10)/1));
+		$grid .= chr(ord('a') + intval(($lon - (intval($lon/2)*2)) / (5/60)));
+		$grid .= chr(ord('a') + intval(($lat - (intval($lat/1)*1)) / (2.5/60)));
+
+		$entity->geoCoordinates->gridSquare = $grid;
+		$entity->save();
+
+		return $grid;	
 
 	}
 

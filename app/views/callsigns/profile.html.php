@@ -14,6 +14,8 @@
 				<dd><?= $callsign->fullAddress() ?></dd>
 			<dt>License Class</dt>
 				<dd><?= $callsign->uls->licenseClass ?></dd>
+			<dt>GridSquare</dt>
+				<dd><?= $callsign->gridSquare() ?></dd>
 			<dt>Latitude: </dt>
 				<dd><span id="mapLat"><?=$callsign->getLatitude()?></span></dd>	
 			<dt>Longitude: </dt>

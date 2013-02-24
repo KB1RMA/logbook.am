@@ -124,6 +124,8 @@ if (!$.support.transition)
 			if ( result.person === undefined ) { result.person = {}; }
 			if ( result.address === undefined ) { result.address = {}; }
 
+			console.log(result);
+
 			var callsign = result.callsign || '',
 			    givenName = result.person.givenName || '',
 			    familyName = result.person.familyName || '',
@@ -142,7 +144,6 @@ if (!$.support.transition)
 				
 				// Reach out to the big bad DOM to populate the results
 				$(this).html(resultRows); 
-
 				
 				resizeCallSearch(function() { 
 					$resultsContainer.fadeIn(300);
@@ -340,7 +341,6 @@ if (!$.support.transition)
 
 		$('#show-elevation-profile').click(function() { createElevationProfile(); return false; });
 		
-
 	}
 
 
