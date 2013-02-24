@@ -61,8 +61,6 @@ class Callsigns extends \lithium\data\Model {
 	}
 
 	public function getLatitude( $entity ) {
-		if ( empty($entity->geoCoordinates) )
-			return false;
 
 		if ( empty($entity->geoCoordinates->latitude) )
 			$entity->geocode();
@@ -71,8 +69,6 @@ class Callsigns extends \lithium\data\Model {
 	}
 
 	public function getLongitude( $entity ) {
-		if ( empty($entity->geoCoordinates) )
-			return false;
 
 		if ( empty($entity->geoCoordinates->longitude) )
 			$entity->geocode();
@@ -119,7 +115,7 @@ class Callsigns extends \lithium\data\Model {
 			return $entity->geoCoordinates->gridSquare;
 
 		$grid = '';
-		$lat  = $entity->getLatitude();
+		$lat = $entity->getLatitude();
 		$lon = $entity->getLongitude();
 
 		$lat  = ($lat + 90);
