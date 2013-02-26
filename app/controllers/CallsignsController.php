@@ -86,13 +86,21 @@ class CallsignsController extends \lithium\action\Controller {
 		// Query the db
 
 		$callsigns = Callsigns::find('all', array(
-			'fields' => array( 'callsign', 'person.givenName', 'person.familyName', 'address.locality', 'address.region' ),
+			'fields' => array( 
+				'callsign', 
+				'person.givenName', 
+				'person.familyName', 
+				'address.locality', 
+				'address.region',
+				'qslInfo.lotwLastActive' 
+			),
 			'limit'	=> '20',
 			'conditions' => array(
 				'callsign' =>	array(
 					'like' => '/^' . $partialCall . '/'),
-				)) 
+			)) 
 		);
+
 		$this->render(array(
 			'type' => 'json',
 			'data' => compact('callsigns')
