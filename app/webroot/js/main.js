@@ -117,25 +117,33 @@ if (!$.support.transition)
 	function populateAutoCompleteResults ( results ) {
 		var i = 0,
 				resultRows = '',
-				anchorTag	= '';
+				anchorTag	= '',
+				yearInPast = new Date();
+				
+		yearInPast.setYear(yearInPast.getFullYear() - 1);
+		yearInPast = Math.round(yearInPast.getTime() / 1000); // Time in epoch
 
 		// Loop through results		
 		$.each(results.callsigns, function(i, result) {
 			if ( result.person === undefined ) { result.person = {}; }
 			if ( result.address === undefined ) { result.address = {}; }
-
-			console.log(result);
+			if ( result.qslInfo === undefined ) { result.qslInfo = {}; }
 
 			var callsign = result.callsign || '',
 			    givenName = result.person.givenName || '',
 			    familyName = result.person.familyName || '',
 			    locality = result.address.locality || '',
-			    region = result.address.region || '';
+			    region = result.address.region || '',
+          lotw = result.qslInfo.lotwLastActive || '';
+
+			// An 'active' LOTW user is considered to be someone who has uploaded in the past year
+			if ( lotw > yearInPast ) { lotw = 'LOTW'; } else { lotw = ''; }
 
 			anchorTag = '<a href="/call/' + callsign + '/">';		
 			resultRows += '<tr><td>' + anchorTag + callsign + '</a></td>';
 			resultRows += '<td>' + anchorTag + givenName + ' ' + familyName + '</a></td>';
-			resultRows += '<td>' + anchorTag + locality + ', ' + region + '</a></td></tr>';
+			resultRows += '<td>' + anchorTag + locality + ', ' + region + '</a></td>';
+			resultRows += '<td>' + lotw + '</a></td></tr>';
 		});
 		
 		// Fade results container out
