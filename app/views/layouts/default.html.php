@@ -35,6 +35,10 @@
 
 				<?php echo $this->content(); ?>
 
+				<footer class="text-center">
+					<a href="https://github.com/KB1RMA/logbook.am">We're open-source</a>
+				</footer>
+
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
         <script type="text/javascript" src="//www.google.com/jsapi"></script>

@@ -332,20 +332,19 @@ body > header {
 	.main-content {
 		background: #fff;
 		width: 70%;
-		margin: 0 auto -15% auto;
-		position: absolute;
-		left: 15%;
-		top: 110px;
+		margin: 110px auto 20px auto;
+		position: relative;
 		-webkit-box-shadow: 0 0 15px 0 rgba(0,0,0,.4);
 						box-shadow: 0 0 15px 0 rgba(0,0,0,.4);
 	}
 
+	/* Callsign profile styling */
 	.callProfile #map_canvas {
 		width: 100%;
 		height: 350px;
 		z-index: 2;
 	}
-	#use-my-location.enabled {display:block;}
+	#use-my-location.enabled { display:block; }
 	#use-my-location {
 		display: none;
 		z-index: 1;
@@ -364,13 +363,67 @@ body > header {
 	}
 		#use-my-location:hover,
 		#use-my-location.active {right: -50px; }
-	.profile-content { padding: 50px; }
+	#show-elevation-profile {
+		display: block;
+		z-index: 1;
+		position: absolute;
+		background: #fff url(../img/mylocation.png) right center no-repeat;
+		width: 50px;
+		height: 50px;
+		right: -20px;
+		top: 100px;
+		text-indent: -999em;
+		cursor: pointer;
+	}
+	.profile-content { 
+		padding: 0 50px 50px 50px;
+		position:relative;
+		overflow:hidden;
+	}
+		.grey-title {
+			color:#DBDBDB;
+			font-weight: normal;
+		}
+		.callsign {
+			margin:0 0 0 -40px;
+			font-weight: normal;
+			font-size: 6.25em;
+			line-height: 1em;
+			letter-spacing: -0.07em;
+			width: 50%;
+			float: left;
+		}
+		.postage-stamp {
+			background-color:#eee;
+			width: 48%;
+			padding: 20px 0;
+			position: relative;
+			font-size: 1.2em;
+			text-align: center;
+			margin: 1.8em -20px 10px 10px;
+		}
+			.postage-stamp .grey-title {
+				position:absolute;
+				margin: 0;
+				top: -1em;
+				left: 0;
+			}
+			.no-info {
+				font-size: 0.8em;
+				color: #c9c9c9;
+			}
+		.general-info {
+			width: 100%;
+			float: left;
+		}
+	body > footer { padding-bottom: 20px; }
 
-.left { float: left; }
-.right { float: right; }
+.left      { float: left; }
+.right     { float: right; }
 .no-margin { margin:0; }
 
-.josefin { font-family: 'Josefin Sans', sans-serif; }
+.text-center { text-align: center; }
+.josefin     { font-family: 'Josefin Sans', sans-serif; }
 
 
 

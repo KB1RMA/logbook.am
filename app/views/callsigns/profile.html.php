@@ -4,33 +4,53 @@
 	<a href="javascript:;" id="show-elevation-profile">Elevation Profile</a>
 	<div id="elevation_profile"></div>
 	<div id="use-my-location" title="Enable your location on the map">My Location</div>
-	<div class="profile-content">
-		<dl>
-			<dt>Callsign: </dt>
-				<dd><?= $callsign->callsign ?></dd>
-			<dt>Name: </dt>
-				<dd><?= $callsign->fullName() ?></dd>
-			<dt>Full Addy: </dt>
-				<dd><?= $callsign->fullAddress() ?></dd>
-			<dt>License Class</dt>
-				<dd><?= $callsign->uls->licenseClass ?></dd>
-			<dt>GridSquare</dt>
-				<dd><?= $callsign->gridSquare() ?></dd>
-			<dt>Latitude: </dt>
-				<dd><span id="mapLat"><?=$callsign->getLatitude()?></span></dd>	
-			<dt>Longitude: </dt>
-				<dd><span id="mapLng"><?=$callsign->getLongitude()?></span></dd>	
-			<dt>LOTW Active?</dt>
-				<dd><?= $callsign->lotwIsActive() ?></dd>	
-			<?php if (!empty($callsign->qslInfo->lotwLastActive)) :?>
-			<dt>Last Upload to LOTW</dt>
-				<dd>
-					<?= date('M d, Y', $callsign->qslInfo->lotwLastActive->sec) ?>
-				</dd>
+	<div class="profile-content clearfix">
+		<h1 class="callsign"><?= $callsign->callsign ?></h1>
+		<div class="postage-stamp right" itemscope itemtype="http://schema.org/Person">
+			<h2 class="grey-title">Postal Address</h2>
+		<?php if ( isset($callsign->person) ) : ?>
+			<strong><span itemprop="givenName"><?= $callsign->person->givenName ?></span
+			>&nbsp;<span itemprop="additionalName"><?= $callsign->person->additionalName ?></span
+			>&nbsp;<span itemprop="familyName"><?= $callsign->person->familyName ?></span></strong>
+		<?php endif ?>
+			<div class="address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+			<?php if ( isset($callsign->address) ) : ?>
+				<?php if ( !empty($callsign->address->postOfficeBoxNumber) ) : ?>
+					P.O. Box&nbsp;<span itemprop="postOfficeBoxNumber"><?= $callsign->address->postOfficeBoxNumber ?></span><br>
+				<?php else : ?>
+					<span itemprop="streetAddress"><?= $callsign->address->streetAddress ?></span><br>
+				<?php endif ?>
+					<span itemprop="addressLocality"><?= $callsign->address->locality ?></span
+					>,&nbsp;<span itemprop="addressRegion"><?= $callsign->address->region ?></span
+					>&nbsp;<span itemprop="addressPostalCode"><?= $callsign->address->postalCode ?></span>
+			<?php else : ?>
+				<p class="no-info"><em>No address information available</em></p>
 			<?php endif ?>
-		</dl>
+			</div>	
+		</div>
+		<div class="general-info">
+			<h2 class="grey-title">General Information</h2>
+			<dl>
+				<dt>License Class</dt>
+					<dd><?= $callsign->uls->licenseClass ?></dd>
+				<dt>GridSquare</dt>
+					<dd><?= $callsign->gridSquare() ?></dd>
+				<dt>Latitude: </dt>
+					<dd><span id="mapLat"><?=$callsign->getLatitude()?></span></dd>	
+				<dt>Longitude: </dt>
+					<dd><span id="mapLng"><?=$callsign->getLongitude()?></span></dd>	
+				<dt>LOTW Active?</dt>
+					<dd><?= $callsign->lotwIsActive() ?></dd>	
+				<?php if (!empty($callsign->qslInfo->lotwLastActive)) :?>
+				<dt>Last Upload to LOTW</dt>
+					<dd>
+						<?= date('M d, Y', $callsign->qslInfo->lotwLastActive->sec) ?>
+					</dd>
+				<?php endif ?>
+			</dl>
+		</div>
 	</div>
-	<div id="json-dump">
+	<div id="json-dump" class="hidden">
 		<?= json_encode($callsign->data()) ?>
 	</div>
 
