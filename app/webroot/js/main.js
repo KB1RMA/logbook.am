@@ -10,16 +10,16 @@ if (!$.support.transition)
 	 */
 	
 	var $ = window.jQuery, 
-			$body = $('body'),
-			$userSettingsDropdown = null,
-			$useMyLocation = null,
-			map_canvas = null,
-			elevation_profile = null,
-			polyline = null,
-			callsignInformation = {}, 
-			bounds = null,
-			chart = null,
-			elevation = null;
+	    $body = $('body'),
+	    $userSettingsDropdown = null,
+	    $useMyLocation = null,
+	    map_canvas = null,
+	    elevation_profile = null,
+	    polyline = null,
+	    callsignInformation = {}, 
+	    bounds = null,
+	    chart = null,
+	    elevation = null;
 
 	/**
 	 * Object to save and retrieve various user preferences
