@@ -193,7 +193,7 @@ if (!$.support.transition)
 			    resultsRows = '',
 			    anchorTag	= '',
 			    yearInPast = new Date(),
-					resultsLength = this.processedResults.length;
+			    resultsLength = this.processedResults.length;
 
 			yearInPast.setYear(yearInPast.getFullYear() - 1);
 			yearInPast = Math.round(yearInPast.getTime() / 1000); // Time in epoch
@@ -319,29 +319,31 @@ if (!$.support.transition)
 		}, plotElevation);
 	}
 	
+
 	/**
 	 * Takes an array of ElevationResult objects, draws the path on the map
 	 * and plots the elevation profile on a GViz ColumnChart
 	 */
 
-  function plotElevation(results) {
+	function plotElevation(results) {
 		elevations = results;
-   	 
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Sample');
-    data.addColumn('number', 'Elevation');
-    for (var i = 0; i < results.length; i++) {
-      data.addRow(['', elevations[i].elevation]);
-    }
+		 
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Sample');
+		data.addColumn('number', 'Elevation');
+		for (var i = 0; i < results.length; i++) {
+			data.addRow(['', elevations[i].elevation]);
+		}
 
-    elevation_profile.style.display = 'block';
-    chart.draw(data, {
-      height: 200,
-      legend: 'none',
-      titleY: 'Elevation (m)',
-      focusBorderColor: '#00ff00'
-    });
-  }
+		elevation_profile.style.display = 'block';
+		chart.draw(data, {
+			height: 200,
+			legend: 'none',
+			titleY: 'Elevation (m)',
+			focusBorderColor: '#00ff00'
+		});
+	}
+
 
 	/**
 	 * Open and close settings dropdown
@@ -393,7 +395,7 @@ if (!$.support.transition)
 
 			if ( ! userPreferences.settings['use-location'] )
 				$useMyLocation.click( function (event) { placeUserOnMap(); event.preventDefault(); 	});
-	
+
 		}
 
 		$('#show-elevation-profile').click(function() { createElevationProfile(); return false; });
@@ -432,7 +434,7 @@ if (!$.support.transition)
 			if ( userPreferences.settings['use-location'] !== "0" ) 
 				placeUserOnMap();
 			
-		}
+	}
 
 	/**
 	 * Document on ready
