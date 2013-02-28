@@ -144,10 +144,12 @@ if (!$.support.transition)
 		},
 
 		find : function( partialCall ) {
-			var ajaxOptions = { type     : 'POST',
-													url      : this.endPoint, 
-													data     : { 'callsign' : partialCall },
-													dataType : 'json' };
+			var ajaxOptions = { 
+						type     : 'POST',
+						url      : this.endPoint, 
+						data     : { 'callsign' : partialCall },
+						dataType : 'json' 
+					};
 
 			$.ajax( ajaxOptions )
 				.done( function( data, textStatus, jqXHR ) { 
