@@ -120,6 +120,18 @@ input[type=text] {
 	font-weight: 700;
 }
 
+dl {}
+	dt {
+		float: left;
+		width: 100px;
+		text-align: right;
+		clear: left;
+	}
+	dd {
+		float: left;
+		width: 50%;
+	}
+
 /* Top of page header crap */
 
 body > header {
@@ -383,6 +395,7 @@ body > header {
 		.grey-title {
 			color:#DBDBDB;
 			font-weight: normal;
+			margin: 0;
 		}
 		.callsign {
 			margin:0 0 0 -40px;

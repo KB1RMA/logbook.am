@@ -1,3 +1,4 @@
+<?php $this->title($callsign->callsign . ' - Logbook.am') ?>
 <div class="main-content callProfile">
 <?php if ( $callsign ) : ?>
 	<div id="map_canvas"></div>	
