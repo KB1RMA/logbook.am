@@ -5,7 +5,7 @@
 
 STOREDIR=./tmp/
 LOTW=http://www.wd5eae.org/LoTW_Data.txt
-TMPCSV=./tmp/lotwforimport.csv
+TMPCSV=./tmp/forimport.csv
 
 HEADER=callsign,qslInfo.lotwLastActive
 
@@ -19,6 +19,3 @@ sed -i 's/,/","/g;s/^/"/;s/$/"/' $TMPCSV
 
 # Add header to the file
 sed -i "1i${HEADER}" $TMPCSV
-
-# Update callsigns with LoTW info
-li3 csv_import --file=$TMPCSV 

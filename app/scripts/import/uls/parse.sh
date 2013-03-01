@@ -4,7 +4,7 @@
 
 STOREDIR=./tmp/
 ULS=http://wireless.fcc.gov/uls/data/complete/l_amat.zip
-TMPCSV=./tmp/ulsforimport.csv
+TMPCSV=./tmp/forimport.csv
 
 # Header line to be inserted into top of CSV for import
 HEADER=uls.fileNumber,callsign,uls.licenseClass,person.givenName,person.additionalName,person.familyName,address.postOfficeBoxNumber,address.streetAddress,address.locality,address.region,address.postalCode,uls.attention,uls.frn
@@ -19,5 +19,5 @@ python uls_parse.py > $TMPCSV
 # Add header to the file
 sed -i "1i${HEADER}" $TMPCSV
 
-#li3 csv_import --file=$TMPCSV 
-
+# to UTF8
+iconv -f US-ASCII -t UTF-8 $TMPCSV > $TMPCSV.utf8 && mv $TMPCSV.utf8 $TMPCSV
