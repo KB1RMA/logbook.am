@@ -82,4 +82,4 @@ if (PHP_SAPI === 'cli') {
 	require __DIR__ . '/bootstrap/console.php';
 }
 
-ini_set("display_errors", 1);?>
+//ini_set("display_errors", 1);?>

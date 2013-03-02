@@ -25,11 +25,14 @@ class Callsigns extends \lithium\data\Model {
         'geoCoordinates.elevation' => array('type' => 'integer', 'default' => 0),
         'geoCoordinates.latitude' => array('type' => 'float'),
         'geoCoordinates.longitude' => array('type' => 'float'),
+        'geoCoordinates.utcShift' => array('type' => 'float'),
         'geoCoordinates.gridSquare' => array('type' => 'string'),
+        'geoCoordinates.continent' => array('type' => 'string'),
         'geoCoordinates.ituZone' => array('type' => 'integer'),
+        'geoCoordinates.ituRegion' => array('type' => 'integer'),
         'geoCoordinates.cqZone' => array('type' => 'integer'),
-        'geoCoordinates.arrlSection' => array('type' => 'integer'),
-        'geoCoordinates.iota' => array('type' => 'integer'),
+        'geoCoordinates.arrlSection' => array('type' => 'string'),
+        'geoCoordinates.iota' => array('type' => 'string'),
         'geoCoordinates.source' => array('type' => 'string'),
     'qslInfo' => array('type' => 'object'),
         'qslInfo.lotwLastActive' => array('type' => 'date'),
@@ -80,7 +83,8 @@ class Callsigns extends \lithium\data\Model {
 		
 		$full_address = trim($entity->fullAddress());
 
-		if ( !empty($full_address) ) {	
+		// If we have an address we can use the geocoder otherwise it uses DXCC
+		if ( $full_address ) {	
 			$geocoder = new \Geocoder\Geocoder();
 			$adapter  = new \Geocoder\HttpAdapter\CurlHttpAdapter();
 		
@@ -94,7 +98,13 @@ class Callsigns extends \lithium\data\Model {
 			$entity->geoCoordinates->source    = 'Google Geocoding API';
 
 			$entity->save();
+
+			return;
 		}
+
+		$entity->dxcc();
+		return;
+
 	}
 
 	public function lotwIsActive( $entity ) {
@@ -122,6 +132,7 @@ class Callsigns extends \lithium\data\Model {
 		$lon  = ($lon + 180);
 
 		$grid .= chr(ord('A') + intval($lon / 20));
+
 		$grid .= chr(ord('A') + intval($lat / 10));
 		$grid .= chr(ord('0') + intval(($lon % 20)/2));
 		$grid .= chr(ord('0') + intval(($lat % 10)/1));
@@ -132,6 +143,62 @@ class Callsigns extends \lithium\data\Model {
 		$entity->save();
 
 		return $grid;	
+
+	}
+
+	public function dxcc( $entity ) {
+
+		// DXCC perl script path
+		$dxccPath = LITHIUM_APP_PATH . '/scripts/dxcc/dxcc ';
+
+		$output = shell_exec( $dxccPath . $entity->callsign );
+
+		$output = explode("\n", $output);
+		$output = array_filter($output);
+		foreach( $output as $field ) {
+			$row = explode(':', $field);
+			$parsed[$row[0]] = trim($row[1]);
+		}
+		$parsed = array_filter($parsed);
+		
+		// Conform the output to our data schema
+		$conformed = array('source' => 'DXCC.pl');
+
+		foreach($parsed as $key=>$value) {
+			switch($key) {
+				case 'WAZ Zone':
+					$conformed['wazZone'] = $value; 
+					break;
+				case 'ITU Zone':
+					$conformed['ituZone'] = $value; 
+					break;
+				case 'Continent':
+					$conformed['continent'] = $value; 
+					break;
+				case 'Latitude':
+					$conformed['latitude'] = $value; 
+					break;
+				case 'Longitude': 
+					$conformed['longitude'] = $value; 
+					break;
+				case 'UTC shift':
+					$conformed['utcShift'] = $value; 
+					break;
+			}
+		}
+		
+		// Grab current Geo Data from model	
+
+		if (isset($entity->geoCoordinates))
+			$GeoCoordinates = $entity->geoCoordinates->data();
+		else
+			$GeoCoordinates = array();
+		
+		// Merge new data from DXCC output with the current model's data
+		$merged = array_merge( $conformed, $GeoCoordinates );
+		$entity->geoCoordinates = (Object)$merged;
+
+		$entity->save();
 
 	}
 
