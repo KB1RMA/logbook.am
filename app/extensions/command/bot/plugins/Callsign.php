@@ -44,7 +44,7 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 
 		$callsigns = preg_split("/[\s]/", $message, 2);
 
-		if ($callsigns[0] != 'c') 
+		if ($callsigns[0] != '.c') 
 			return;
 
 		if (!isset($callsigns[1])) 
