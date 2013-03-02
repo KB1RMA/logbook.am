@@ -4,3 +4,6 @@
 [submodule "app/libraries/_source/Geocoder"]
 	path = app/libraries/_source/Geocoder
 	url = git://github.com/willdurand/Geocoder.git
+[submodule "app/scripts/dxcc"]
+	path = app/scripts/dxcc
+	url = git@github.com:KB1RMA/dxcc.git
