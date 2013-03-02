@@ -15,7 +15,7 @@
 			>&nbsp;<span itemprop="familyName"><?= $callsign->person->familyName ?></span></strong>
 		<?php endif ?>
 			<div class="address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-			<?php if ( isset($callsign->address) ) : ?>
+			<?php if ( $callsign->getFullAddress() ) : ?>
 				<?php if ( !empty($callsign->address->postOfficeBoxNumber) ) : ?>
 					P.O. Box&nbsp;<span itemprop="postOfficeBoxNumber"><?= $callsign->address->postOfficeBoxNumber ?></span><br>
 				<?php else : ?>
@@ -32,14 +32,24 @@
 		<div class="general-info">
 			<h2 class="grey-title">General Information</h2>
 			<dl>
+				<?php if (isset($callsign->uls)) : ?>
 				<dt>License Class</dt>
 					<dd><?= $callsign->uls->licenseClass ?></dd>
+				<?php endif ?>
 				<dt>GridSquare</dt>
-					<dd><?= $callsign->gridSquare() ?></dd>
+					<dd><?= $callsign->getGridSquare() ?></dd>
 				<dt>Latitude: </dt>
 					<dd><span id="mapLat"><?=$callsign->getLatitude()?></span></dd>	
 				<dt>Longitude: </dt>
 					<dd><span id="mapLng"><?=$callsign->getLongitude()?></span></dd>	
+				<dt>ITU Zone: </dt>
+					<dd><?=$callsign->getItuZone()?></span></dd>	
+				<dt>WAZ Zone: </dt>
+					<dd><?=$callsign->getWazZone()?></span></dd>	
+				<dt>Continent: </dt>
+					<dd><?=$callsign->getContinent()?></span></dd>	
+				<dt>Country: </dt>
+					<dd><?=$callsign->getCountry()?></span></dd>	
 				<dt>LOTW Active?</dt>
 					<dd><?= $callsign->lotwIsActive() ?></dd>	
 				<?php if (!empty($callsign->qslInfo->lotwLastActive)) :?>

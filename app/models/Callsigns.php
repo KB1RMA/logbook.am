@@ -47,15 +47,15 @@ class Callsigns extends \lithium\data\Model {
     'personalBio' => array('type' => 'string'),
 	);
 
-	public function fullName( $entity ) {
+	public function getFullName( $entity ) {
 		if ( empty($entity->person) )
 			return false;
 
 		return $entity->person->givenName . ' ' . $entity->person->additionalName . ' ' . $entity->person->familyName;
 	}
 	
-	public function fullAddress( $entity ) {
-		if ( empty($entity->address) )
+	public function getFullAddress( $entity ) {
+		if ( !isset($entity->address->locality) )
 			return false;
 
 		$street_address = ( empty( $entity->address->postOfficeBoxNumber ) ? $entity->address->streetAddress : 'PO Box ' . $entity->address->PostOfficeBoxNumber );
@@ -64,7 +64,6 @@ class Callsigns extends \lithium\data\Model {
 	}
 
 	public function getLatitude( $entity ) {
-
 		if ( empty($entity->geoCoordinates->latitude) )
 			$entity->geocode();
 
@@ -72,16 +71,43 @@ class Callsigns extends \lithium\data\Model {
 	}
 
 	public function getLongitude( $entity ) {
-
 		if ( empty($entity->geoCoordinates->longitude) )
 			$entity->geocode();
 
 		return $entity->geoCoordinates->longitude;
 	}
 
+	public function getItuZone( $entity ) {
+		if ( empty($entity->geoCoordinates->ituZone) )
+			$entity->dxcc();
+
+		return $entity->geoCoordinates->ituZone;
+	}
+
+	public function getWazZone( $entity ) {
+		if ( empty($entity->geoCoordinates->wazZone) )
+			$entity->dxcc();
+
+		return $entity->geoCoordinates->wazZone;
+	}
+
+	public function getContinent( $entity ) {
+		if ( empty($entity->geoCoordinates->continent) )
+			$entity->dxcc();
+
+		return $entity->geoCoordinates->continent;
+	}
+
+	public function getCountry( $entity ) {
+		if ( empty($entity->address->addressCountry) )
+			$entity->dxcc();
+		
+		return $entity->address->addressCountry;
+	}
+
 	public function geocode( $entity ) {
 		
-		$full_address = trim($entity->fullAddress());
+		$full_address = trim($entity->getFullAddress());
 
 		// If we have an address we can use the geocoder otherwise it uses DXCC
 		if ( $full_address ) {	
@@ -119,7 +145,7 @@ class Callsigns extends \lithium\data\Model {
 
 	}
 
-	public function gridSquare( $entity, $force = false ) {
+	public function getGridSquare( $entity, $force = false ) {
 
 		if ( !empty($entity->geoCoordinates->gridSquare) && !$force )
 			return $entity->geoCoordinates->gridSquare;
@@ -136,8 +162,10 @@ class Callsigns extends \lithium\data\Model {
 		$grid .= chr(ord('A') + intval($lat / 10));
 		$grid .= chr(ord('0') + intval(($lon % 20)/2));
 		$grid .= chr(ord('0') + intval(($lat % 10)/1));
-		$grid .= chr(ord('a') + intval(($lon - (intval($lon/2)*2)) / (5/60)));
-		$grid .= chr(ord('a') + intval(($lat - (intval($lat/1)*1)) / (2.5/60)));
+		if ($entity->getFullAddress()) {
+			$grid .= chr(ord('a') + intval(($lon - (intval($lon/2)*2)) / (5/60)));
+			$grid .= chr(ord('a') + intval(($lat - (intval($lat/1)*1)) / (2.5/60)));
+		}
 
 		$entity->geoCoordinates->gridSquare = $grid;
 		$entity->save();
@@ -181,9 +209,11 @@ class Callsigns extends \lithium\data\Model {
 				case 'Longitude': 
 					$conformed['longitude'] = $value; 
 					break;
-				case 'UTC shift':
-					$conformed['utcShift'] = $value; 
-					break;
+				case 'Country Name':
+					if (!isset($entity->address))
+						$entity->address = (Object) array( 'addressCountry' => $value );
+					else
+						$entity->address['addressCountry'] = $value;
 			}
 		}
 		
