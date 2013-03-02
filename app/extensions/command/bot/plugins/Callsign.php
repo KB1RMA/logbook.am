@@ -44,7 +44,7 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 
 		$callsigns = preg_split("/[\s]/", $message, 2);
 
-		if ($callsigns[0] != 'c2') 
+		if ($callsigns[0] != 'c') 
 			return;
 
 		if (!isset($callsigns[1])) 
@@ -58,18 +58,27 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 			)
 		));
 		
-		if (!count($callsign))
+		if ( !count($callsign) )
 			return String::insert($responses['notfound'], compact('requestedCall'));
 
 		$response .= $callsign->callsign . ' - ';
-		$response .= $callsign->person->givenName . ' ' . $callsign->person->additionalName . ' ' . $callsign->person->familyName . ' - ';
-		if (isset($callsign->address))
-			$response .= $callsign->address->streetAddress . ' ' . $callsign->address->locality . ', ' . $callsign->address->region . ' ' . $callsign->address->postalCode . ' - ';
-		else
-			$response .= 'No Address Information - ';
 
-		if (isset($callsign->uls))
+		if ( isset($callsign->uls) )
 			$response .= 'Class: ' . $callsign->uls->licenseClass . ' - ';
+
+		if ( $callsign->getFullName() )
+			$response .= $callsign->getFullName() . ' - ';
+
+		if ( $callsign->getFullAddress() )
+			$response .= $callsign->getFullAddress() . ' - ';
+
+		$response .= 'Gridsquare: ' . $callsign->getGridSquare() . ' - ';
+		$response .= 'ITU Zone: ' . $callsign->getItuZone() . ' - ';
+		$response .= 'WAZ Zone: ' . $callsign->getWazZone() . ' - ';
+		$response .= 'Country: ' . $callsign->getCountry() . ' - ';
+		$response .= 'Continent: ' . $callsign->getContinent() . ' - ';
+		$response .= 'Lat: ' . $callsign->getLatitude() . ' - ';
+		$response .= 'Lng: ' . $callsign->getLongitude() . ' - ';
 
 		$response .= 'http://lookup.logbook.am/call/' . $requestedCall;
 
