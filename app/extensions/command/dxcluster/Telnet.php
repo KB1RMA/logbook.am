@@ -74,7 +74,7 @@ class Telnet extends \lithium\console\Command {
 		$spot['by'] = substr($line, 6, 10);
 		$spot['frequency'] = (float)substr($line, 17, 9);
 		$spot['callsign'] = substr($line, 26, 12);
-		$spot['comment'] = substr($line, 40, 30);
+		$spot['comment'] = substr($line, 39, 31);
 		// Want higher time precision than provided by the cluster, so use server time
 		$spot['time'] = time();
 
