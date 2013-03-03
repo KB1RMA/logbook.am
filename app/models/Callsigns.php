@@ -116,7 +116,7 @@ class Callsigns extends \lithium\data\Model {
 		
 			$geocode = $geocoder
 										->registerProvider(new \Geocoder\Provider\GoogleMapsProvider($adapter))
-										->geocode($entity->fullAddress());
+										->geocode($entity->getFullAddress());
 
 			$entity->geoCoordinates = new \stdClass();	
 			$entity->geoCoordinates->latitude  = $geocode->getLatitude();
@@ -210,7 +210,7 @@ class Callsigns extends \lithium\data\Model {
 					$conformed['longitude'] = $value; 
 					break;
 				case 'Country Name':
-					if (!isset($entity->address))
+					if (!$entity->getFullAddress())
 						$entity->address = (Object) array( 'addressCountry' => $value );
 					else
 						$entity->address['addressCountry'] = $value;
@@ -219,14 +219,13 @@ class Callsigns extends \lithium\data\Model {
 		
 		// Grab current Geo Data from model	
 
-		if (isset($entity->geoCoordinates))
-			$GeoCoordinates = $entity->geoCoordinates->data();
+		if (isset($entity->geoCoordinates->latitude))
+			$GeoCoordinates = (array)$entity->geoCoordinates;
 		else
 			$GeoCoordinates = array();
 		
 		// Merge new data from DXCC output with the current model's data
-		$merged = array_merge( $conformed, $GeoCoordinates );
-		$entity->geoCoordinates = (Object)$merged;
+		$entity->geoCoordinates = (Object)array_merge( $conformed, $GeoCoordinates );
 
 		$entity->save();
 
