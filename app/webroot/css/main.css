@@ -425,7 +425,7 @@ body > header {
 				color: #c9c9c9;
 			}
 		.general-info {
-			width: 100%;
+			width: 48%;
 			float: left;
 		}
 		#dx-cluster-spots { font-size: 0.6em; }

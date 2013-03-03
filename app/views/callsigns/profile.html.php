@@ -61,7 +61,7 @@
 			</dl>
 		</div>
 		<div class="postage-stamp right">
-			<h1 class="grey-title">Spots</h1>
+			<h2 class="grey-title">Spots</h2>
 			<div id="dx-cluster-spots" class="monospace" data-callsign="<?= $callsign->callsign ?>"></div>
 		</div>
 	</div>

@@ -298,7 +298,7 @@ if (!$.support.transition)
 				    mins = ~~ ((secondsAgo % 3600) / 60),
 				    secs = parseInt(secondsAgo % 60);
 
-				html += '<tr><td>' + result.frequency + '</td><td>' + result.comment + '</td><td>'+ hrs + ' ' + mins + ' ' + secs + ' s ago</td><td>' + result.by + '</td></tr>';	
+				html += '<tr><td>' + result.frequency + '</td><td>' + result.comment + '</td><td>'+ hrs + 'h ' + mins + 'm ' + secs + 's ago</td><td>' + result.by + '</td></tr>';	
 			});
 
 			html += '</tbody></table>';
