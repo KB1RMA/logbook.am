@@ -9,6 +9,7 @@
 namespace app\extensions\command\bot\plugins;
 
 use app\models\Callsigns;
+use app\models\DxSpots;
 use \lithium\util\String;
 
 /**
@@ -57,9 +58,30 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 				'callsign' => $requestedCall,
 			)
 		));
+		$spot = DxSpots::first(array(
+			'conditions' => array(
+				'callsign' => $requestedCall,
+			)
+		));
 		
-		if ( !count($callsign) )
-			return String::insert($responses['notfound'], compact('requestedCall'));
+		// If callsign is spotted
+		$spotString = '';
+
+		if ( count($spot) ) {
+			$timeDifference = time() - $spot->time->sec;
+			$spotString = 'Spotted on ' . $spot->frequency. ' ';
+
+			if ($timeDifference > 60)
+				$spotString .= ((integer)($timeDifference / 60)) . ' minutes ago';
+			else
+				$spotString .= $timeDifference . ' seconds ago';
+		}
+
+		if ( !count($callsign) ) {
+			$response = String::insert($responses['notfound'], compact('requestedCall'));
+			$response .= ' but was ' . $spotString;
+			return $response;
+		}
 
 		$response .= $callsign->callsign . ' - ';
 
@@ -79,8 +101,10 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 		$response .= 'Continent: ' . $callsign->getContinent() . ' - ';
 		$response .= 'Lat: ' . $callsign->getLatitude() . ' - ';
 		$response .= 'Lng: ' . $callsign->getLongitude() . ' - ';
+		$response .= $spotString;
 
-		$response .= 'http://lookup.logbook.am/call/' . $requestedCall;
+		#$response .= 'http://lookup.logbook.am/call/' . $requestedCall;
+
 
 		return $response;
 	
