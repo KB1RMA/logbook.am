@@ -60,6 +60,10 @@
 				<?php endif ?>
 			</dl>
 		</div>
+		<div class="postage-stamp right">
+			<h2 class="grey-title">Spots</h2>
+			<div id="dx-cluster-spots" class="monospace" data-callsign="<?= $callsign->callsign ?>"></div>
+		</div>
 	</div>
 	<div id="json-dump" class="hidden">
 		<?= json_encode($callsign->data()) ?>
