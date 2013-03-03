@@ -9,6 +9,7 @@
 namespace app\extensions\command\dxcluster;
 
 use lithium\core\Libraries;
+use app\models\DxSpots;
 
 class Telnet extends \lithium\console\Command {
 
@@ -20,7 +21,8 @@ class Telnet extends \lithium\console\Command {
 
 	protected $_classes = array(
 		'socket' => 'lithium\net\socket\Stream',
-		'response' => 'lithium\console\Response'
+		'response' => 'lithium\console\Response',
+		'spot' => '',
 	);
 
 	public function _init() {
@@ -73,10 +75,17 @@ class Telnet extends \lithium\console\Command {
 		$spot['frequency'] = (float)substr($line, 17, 9);
 		$spot['callsign'] = substr($line, 26, 12);
 		$spot['comment'] = substr($line, 40, 30);
-		$spot['time'] = substr($line, 70);
+		// Want higher time precision than provided by the cluster, so use server time
+		$spot['time'] = time();
 
+		// Trim whitespace from all array elements
 		$spot = array_map('trim', $spot);
+		
+		if (DxSpots::create($spot)->save())
+			$this->out('Saved');
+
 		return $spot;
+
 	}
 
 }
