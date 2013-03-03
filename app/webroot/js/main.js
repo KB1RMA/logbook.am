@@ -252,6 +252,61 @@ if (!$.support.transition)
 
 	} // End of autoComplete object
 
+
+	/**
+	 * Object to interact with the auto complete results
+	 */
+
+	var dxSpots = {
+		endPoint : '/dx_spots/call',
+		results : null,
+		callsign : null,
+		$spotsContainer : null,
+
+		init : function() {
+			this.$spotsContainer = $('#dx-cluster-spots');
+	
+			// jump out if there's no container
+			if ( !this.$spotsContainer.length )
+				return false; 
+
+			this.callsign = this.$spotsContainer.attr("data-callsign");
+			this.find();
+		},
+
+		find : function () {
+			var ajaxOptions = { 
+						type     : 'POST',
+						url      : this.endPoint, 
+						data     : { 'callsign' : this.callsign },
+						dataType : 'json' 
+					};
+
+			$.ajax( ajaxOptions )
+				.done( function( data, textStatus, jqXHR ) { 
+					dxSpots.results = data;
+					dxSpots.populateResults(); 
+				});
+		},
+
+		populateResults : function() {
+			var html = '<table><thead><th>freq</th><th>comment</th><th>time</th><th>by</th></thead><tbody>',
+			    seconds = new Date().getTime() / 1000;
+			$.each(this.results.spots, function(i, result) {
+				var secondsAgo = seconds - result.time,
+				    hrs = ~~ (secondsAgo / 3600),
+				    mins = ~~ ((secondsAgo % 3600) / 60),
+				    secs = parseInt(secondsAgo % 60);
+
+				html += '<tr><td>' + result.frequency + '</td><td>' + result.comment + '</td><td>'+ hrs + ' ' + mins + ' ' + secs + ' s ago</td><td>' + result.by + '</td></tr>';	
+			});
+
+			html += '</tbody></table>';
+			this.$spotsContainer.html(html);
+		}
+
+	}
+
 	
 	function placeUserOnMap( callback ) {
 			if ( navigator.geolocation ) {
@@ -388,6 +443,9 @@ if (!$.support.transition)
 		
 		// Initialize Auto call completion
 		autoComplete.init();
+
+		// DX Spot container initialization
+		dxSpots.init();
 
 		// Enable location button if the BROWSER-EXPERIENCE is adequate (looking at you, Scotty)
 		if(navigator.geolocation) {

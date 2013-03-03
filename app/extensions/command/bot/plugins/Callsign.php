@@ -61,7 +61,8 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 		$spot = DxSpots::first(array(
 			'conditions' => array(
 				'callsign' => $requestedCall,
-			)
+			),
+			'order' => array('$natural' => -1 ),
 		));
 		
 		// If callsign is spotted
@@ -69,7 +70,7 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 
 		if ( count($spot) ) {
 			$timeDifference = time() - $spot->time->sec;
-			$spotString = 'Spotted on ' . $spot->frequency. ' ';
+			$spotString = 'Spotted on ' . $spot->frequency . ' ';
 
 			if ($timeDifference > 60)
 				$spotString .= ((integer)($timeDifference / 60)) . ' minutes ago';
@@ -79,7 +80,8 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 
 		if ( !count($callsign) ) {
 			$response = String::insert($responses['notfound'], compact('requestedCall'));
-			$response .= ' but was ' . $spotString;
+			if ($spotString)
+				$response .= ' but was ' . $spotString;
 			return $response;
 		}
 
