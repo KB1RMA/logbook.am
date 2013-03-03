@@ -105,18 +105,27 @@ class Callsigns extends \lithium\data\Model {
 		return $entity->address->addressCountry;
 	}
 
-	public function geocode( $entity ) {
+	public function geocode( $entity, $address = null ) {
 		
-		$full_address = trim($entity->getFullAddress());
+		if (!$address) {
+			$address = trim($entity->getFullAddress());
+			
+			// If there's no address and one hasn't been specified, use DXCC
+			// to find the country and geocode that
+			if (!$address) {
+				$entity->dxcc();	
+				$address = $entity->address->addressCountry;
+			}
+				
+		}
 
-		// If we have an address we can use the geocoder otherwise it uses DXCC
-		if ( $full_address ) {	
-			$geocoder = new \Geocoder\Geocoder();
-			$adapter  = new \Geocoder\HttpAdapter\CurlHttpAdapter();
-		
+		$geocoder = new \Geocoder\Geocoder();
+		$adapter  = new \Geocoder\HttpAdapter\CurlHttpAdapter();
+	
+		try {
 			$geocode = $geocoder
 										->registerProvider(new \Geocoder\Provider\GoogleMapsProvider($adapter))
-										->geocode($entity->getFullAddress());
+										->geocode($address);
 
 			$entity->geoCoordinates = new \stdClass();	
 			$entity->geoCoordinates->latitude  = $geocode->getLatitude();
@@ -124,11 +133,10 @@ class Callsigns extends \lithium\data\Model {
 			$entity->geoCoordinates->source    = 'Google Geocoding API';
 
 			$entity->save();
-
-			return;
+		} catch (Exception $e) {
+			// suppress geocoder errors for now
 		}
 
-		$entity->dxcc();
 		return;
 
 	}
@@ -214,6 +222,7 @@ class Callsigns extends \lithium\data\Model {
 						$entity->address = (Object) array( 'addressCountry' => $value );
 					else
 						$entity->address['addressCountry'] = $value;
+					break;
 			}
 		}
 		
@@ -223,7 +232,7 @@ class Callsigns extends \lithium\data\Model {
 			$GeoCoordinates = (array)$entity->geoCoordinates;
 		else
 			$GeoCoordinates = array();
-		
+
 		// Merge new data from DXCC output with the current model's data
 		$entity->geoCoordinates = (Object)array_merge( $conformed, $GeoCoordinates );
 
