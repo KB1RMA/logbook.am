@@ -202,7 +202,6 @@ body > header {
 					}
 					.header-container #callsign-results tr:hover a { color: #ff6f27; }
 		#clock { 
-			font-family:"Lucida Console", Monaco, monospace;
 			font-size: .8em;
 			line-height: 50px;
 			margin-right: 40px;
@@ -429,6 +428,11 @@ body > header {
 			width: 100%;
 			float: left;
 		}
+		#dx-cluster-spots { font-size: 0.6em; }
+			#dx-cluster-spots table { 
+				width: 90%;
+				margin : 10px auto;
+			}
 	body > footer { padding-bottom: 20px; }
 
 .left      { float: left; }
@@ -437,7 +441,7 @@ body > header {
 
 .text-center { text-align: center; }
 .josefin     { font-family: 'Josefin Sans', sans-serif; }
-
+.monospace   { font-family: "Lucida Console", Monaco, monospace;}
 
 
 

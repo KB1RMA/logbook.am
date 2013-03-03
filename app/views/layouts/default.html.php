@@ -26,7 +26,7 @@
 					<div class="header-container centered clearfix">
 					<?php if ( !isset($isHome) ) : echo $this->_render('element', 'callsigninput'); endif ?>
 						<a id="user-settings" class="right ir" title="User Settings"></a>
-						<div id="clock" class="right"><?= gmdate("H:i:s", time());?> UTC</div>
+						<div id="clock" class="right monospace"><?= gmdate("H:i:s", time());?> UTC</div>
 					</div>
 					<div id="user-settings-dropdown">
 						<?= $this->_render('element', 'usersettings') ?>
