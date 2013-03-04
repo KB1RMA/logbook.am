@@ -51,7 +51,7 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 		if (!isset($callsigns[1])) 
 			return;
 
-		$requestedCall = strtoupper($callsigns[1]);
+		$requestedCall = strtoupper(trim($callsigns[1]));
 
 		$callsign = Callsigns::first(array( 
 			'conditions' => array( 
@@ -102,8 +102,8 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 		$response .= 'Country: ' . $callsign->getCountry() . ' - ';
 		$response .= 'Continent: ' . $callsign->getContinent() . ' - ';
 		$response .= 'Lat: ' . $callsign->getLatitude() . ' - ';
-		$response .= 'Lng: ' . $callsign->getLongitude() . ' - ';
-		$response .= $spotString;
+		$response .= 'Lng: ' . $callsign->getLongitude();
+		$response .= ' - ' . $spotString;
 
 		#$response .= 'http://lookup.logbook.am/call/' . $requestedCall;
 
