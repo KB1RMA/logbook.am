@@ -170,13 +170,18 @@ if (!$.support.transition)
 				if ( result.address === undefined ) { result.address = {}; }
 				if ( result.qslInfo === undefined ) { result.qslInfo = {}; }
 					
+				var address = '';
+				if ( result.address.locality === undefined )
+					address = result.address.addressCountry;	
+				else
+					address = result.address.locality + ', ' + result.address.region;
+
 				// Build results object
 				processed.push( {	
 					callsign   : result.callsign || '',
 					givenName  : result.person.givenName || '',
 					familyName : result.person.familyName || '',
-					locality   : result.address.locality || '',
-					region     : result.address.region || '',
+					address    : address || '',
 					lotw       : result.qslInfo.lotwLastActive || ''
 				});
 
@@ -208,7 +213,7 @@ if (!$.support.transition)
 				anchorTag   = '<a href="/call/' + result.callsign + '/">';		
 				resultsRows += '<tr><td>' + anchorTag + result.callsign + '</a></td>';
 				resultsRows += '<td>' + anchorTag + result.givenName + ' ' + result.familyName + '</a></td>';
-				resultsRows += '<td>' + anchorTag + result.locality + ', ' + result.region + '</a></td>';
+				resultsRows += '<td>' + anchorTag + result.address + '</a></td>';
 				resultsRows += '<td>' + lotw + '</a></td></tr>';
 			}
 

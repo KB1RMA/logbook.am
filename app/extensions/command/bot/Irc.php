@@ -33,11 +33,11 @@ class Irc extends \lithium\console\Command {
 		'response' => 'lithium\console\Response'
 	);
 
-	public function _init() {
+	public function _init( $configFile = '/config/li3_bot.ini' ) {
 		parent::_init();
 
 		$plugin = dirname(dirname(dirname(__DIR__)));
-		$this->_config += parse_ini_file($plugin . '/config/li3_bot.ini');
+		$this->_config += parse_ini_file($plugin . $configFile);
 		foreach ($this->_config as $key => $value) {
 			$key = "_{$key}";
 			if (isset($this->{$key}) && $key !== '_classes') {

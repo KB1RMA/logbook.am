@@ -92,6 +92,7 @@ class CallsignsController extends \lithium\action\Controller {
 				'person.familyName', 
 				'address.locality', 
 				'address.region',
+				'address.addressCountry',
 				'qslInfo.lotwLastActive' 
 			),
 			'limit'	=> '20',
