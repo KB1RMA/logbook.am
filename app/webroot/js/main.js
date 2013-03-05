@@ -1,14 +1,14 @@
 // Delegate .transition() calls to .animate()
 // if the browser can't do CSS transitions.
 if (!$.support.transition)
-		$.fn.transition = $.fn.animate;
+	$.fn.transition = $.fn.animate;
 
-(function( window, undefined) {
+(function (window, undefined) {
 
 	/**
 	 * Prepare variables for use within scope
 	 */
-	
+
 	var $ = window.jQuery, 
 	    $body = $('body'),
 	    $userSettingsDropdown = null,
@@ -31,7 +31,7 @@ if (!$.support.transition)
 		prefix : 'logbook_',
 		settings : {},
 
-		init : function() {
+		init : function () {
 			this.bindToForm();
 			// Retrieve default settings to populate settings object 
 			this.retrieveSettings();
@@ -40,7 +40,7 @@ if (!$.support.transition)
 			this.updateSettings();
 		},
 
-		bindToForm : function() {
+		bindToForm : function () {
 			this.$form = $('#settings-list');
 			this.$form.find('input').change(function() { 
 				userPreferences.retrieveSettings();	
@@ -48,21 +48,21 @@ if (!$.support.transition)
 			});
 		},
 
-		load : function() {
+		load : function () {
 			for ( var setting in this.settings ) {
 				userPreferences.settings[setting] = window.localStorage.getItem( this.prefix + setting );
 			}
 			return this.settings;
 		},
 
-		save : function() {
+		save : function () {
 			for ( var setting in this.settings ) {
 				window.localStorage.setItem( userPreferences.prefix + setting, userPreferences.settings[setting] );	
 			}
 			console.log(this.settings);
 		},
 
-		retrieveSettings : function() {
+		retrieveSettings : function () {
 			var settings = new Object;
 			this.$form.find(':input').each( function() {
 				$element = $(this);

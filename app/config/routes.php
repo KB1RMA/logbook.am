@@ -37,6 +37,7 @@ if ($locales = Environment::get('locales')) {
  * The primary role of the application, service callsign profiles
  */
 
+Router::connect('/call/{:args}/spots', 'DxSpots::call');
 Router::connect('/call/{:args}', 'Callsigns::profile');
 
 /**

@@ -47,6 +47,25 @@ class Callsigns extends \lithium\data\Model {
 		'personalBio' => array('type' => 'string'),
 	);
 
+	public static function isValid( $callsign = '' ) {
+		/**
+		 * http://www.mail-archive.com/php-general@lists.php.net/msg180519.html
+		 */
+
+		$pattern  = "/^";
+		$pattern .= "([0-9][A-Z][0-9][A-Z]{3})|"; //4N1UBG
+		$pattern .= "([A-Z][0-9][A-Z]{1,3})|";    //N9URK, W1AW, W1W
+		$pattern .= "([A-Z]{2}[0-9][A-Z]{1,3})"; //WB6NOA, AD4HZ, WA1W
+		$pattern .= "/";
+
+
+		if ( preg_match( $pattern, $callsign ) )
+			return true;
+
+		return false;
+
+	}
+
 	public function getFullName( $entity ) {
 		if ( empty($entity->person) )
 			return false;

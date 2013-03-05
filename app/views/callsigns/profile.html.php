@@ -1,4 +1,4 @@
-<?php $this->title($callsign->callsign . ' - Logbook.am') ?>
+<?php $this->title($requestedCall. ' - Logbook.am') ?>
 <div class="main-content callProfile">
 <?php if ( $callsign ) : ?>
 	<div id="map_canvas"></div>	
@@ -72,6 +72,16 @@
 	</div>
 
 <?php else : ?>
-	<p><?= $requestedCall ?> not found!</p>
+	<?php if ( $isValid ) :?>
+	<div class="profile-content clearfix">
+		<p><?= $requestedCall ?> looks like a valid callsign, but we don't have any info</p>
+			<h2 class="grey-title">Spots</h2>
+			<div id="dx-cluster-spots" class="monospace" data-callsign="<?= $requestedCall?>">
+				<p class="no-info"><em>Loading spots...</em></p>
+			</div>
+	</div>
+	<?php else : ?>
+	<p><?= $requestedCall ?> doesn't look like a valid callsign!</p>
+	<?php endif ?>
 <?php endif ?>
 </div>

@@ -56,7 +56,10 @@ class CallsignsController extends \lithium\action\Controller {
 			)
 		));
 
-		return compact('callsign', 'requestedCall');
+		if (!count($callsign) )
+			$isValid = Callsigns::isValid($requestedCall);
+
+		return compact('callsign', 'requestedCall', 'isValid');
 			
 	}
 

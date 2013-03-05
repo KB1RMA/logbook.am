@@ -103,7 +103,9 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 		$response .= 'Continent: ' . $callsign->getContinent() . ' - ';
 		$response .= 'Lat: ' . $callsign->getLatitude() . ' - ';
 		$response .= 'Lng: ' . $callsign->getLongitude();
-		$response .= ' - ' . $spotString;
+
+		if ($spotString)
+			$response .= ' - ' . $spotString;
 
 		#$response .= 'http://lookup.logbook.am/call/' . $requestedCall;
 
