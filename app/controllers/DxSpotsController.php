@@ -33,6 +33,8 @@ class DxSpotsController extends \lithium\action\Controller {
 			'order' => array('time' => 'DESC'),
 			'limit' => $limit,
 		));
+
+		$totalSpots = count($spots);
 	
 		$callsign = Callsigns::first(array(
 			'conditions' => array('callsign' => $requestedCall ),
@@ -44,11 +46,11 @@ class DxSpotsController extends \lithium\action\Controller {
 		if ( $this->request->is('ajax') ) {
 			$this->render(array(
 				'type' => 'json',
-				'data' => compact('spots')
+				'data' => compact('spots', 'callsign', 'totalSpots')
 			));
 		}
 
-		return compact('spots', 'callsign');
+		return compact('spots', 'callsign', 'totalSpots');
 
 	}
 

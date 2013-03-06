@@ -70,15 +70,14 @@
 	<div id="json-dump" class="hidden">
 		<?= json_encode($callsign->data()) ?>
 	</div>
-
 <?php else : ?>
 	<?php if ( $isValid ) :?>
 	<div class="profile-content clearfix">
 		<p><?= $requestedCall ?> looks like a valid callsign, but we don't have any info</p>
-			<h2 class="grey-title">Spots</h2>
-			<div id="dx-cluster-spots" class="monospace" data-callsign="<?= $requestedCall?>">
-				<p class="no-info"><em>Loading spots...</em></p>
-			</div>
+		<h2 class="grey-title">Spots</h2>
+		<div id="dx-cluster-spots" class="monospace" data-callsign="<?= $requestedCall?>" data-limit="10">
+			<p class="no-info"><em>Loading spots...</em></p>
+		</div>
 	</div>
 	<?php else : ?>
 	<p><?= $requestedCall ?> doesn't look like a valid callsign!</p>

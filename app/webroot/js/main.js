@@ -266,6 +266,7 @@ if (!$.support.transition)
 		endPoint : '/dx_spots/call',
 		results : null,
 		callsign : null,
+		limit : 10,
 		$spotsContainer : null,
 
 		init : function() {
@@ -276,6 +277,7 @@ if (!$.support.transition)
 				return false; 
 
 			this.callsign = this.$spotsContainer.attr("data-callsign");
+			this.limit = this.$spotsContainer.attr("data-limit");
 			this.find();
 		},
 
@@ -283,7 +285,7 @@ if (!$.support.transition)
 			var ajaxOptions = { 
 						type     : 'POST',
 						url      : this.endPoint, 
-						data     : { 'callsign' : this.callsign },
+						data     : { 'callsign' : this.callsign, 'limit' : this.limit },
 						dataType : 'json' 
 					};
 
