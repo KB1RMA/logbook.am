@@ -36,6 +36,9 @@ Filters::apply('app\models\DxSpots', 'save', function($self, $params, $chain ) {
 			case $frequency >= 7000 && $frequency <= 7300:
 				$entity->band = '40';
 				break;
+			case $frequency >= 10100 && $frequency <= 10150:
+				$entity->band = '30';
+				break;
 			case $frequency >= 14000 && $frequency <= 14300:
 				$entity->band = '20';
 				break;
