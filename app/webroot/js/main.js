@@ -297,7 +297,7 @@ if (!$.support.transition)
 		},
 
 		populateResults : function() {
-			var html = '<table><thead><th>freq</th><th>comment</th><th>time</th><th>by</th></thead><tbody>',
+			var html = '<table><thead><th>band</th><th>freq</th><th>comment</th><th>time</th><th>by</th></thead><tbody>',
 			    seconds = new Date().getTime() / 1000;
 			$.each(this.results.spots, function(i, result) {
 				var secondsAgo = seconds - result.time,
@@ -305,7 +305,7 @@ if (!$.support.transition)
 				    mins = ~~ ((secondsAgo % 3600) / 60),
 				    secs = parseInt(secondsAgo % 60);
 
-				html += '<tr><td>' + result.frequency + '</td><td>' + result.comment + '</td><td>'+ hrs + 'h ' + mins + 'm ' + secs + 's ago</td><td>' + result.by + '</td></tr>';	
+				html += '<tr><td>'+ result.band + '</td><td>' + result.frequency + '</td><td>' + result.comment + '</td><td>'+ hrs + 'h ' + mins + 'm ' + secs + 's ago</td><td>' + result.by + '</td></tr>';	
 			});
 
 			html += '</tbody></table>';
