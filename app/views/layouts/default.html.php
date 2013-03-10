@@ -44,6 +44,7 @@
         <script type="text/javascript" src="//www.google.com/jsapi"></script>
 				<script src="/js/plugins.js"></script>
         <script src="/js/main.js"></script>
+				<?= $this->scripts() ?>
 				
 				<?= $this->_render('element', 'analytics') ?>
 

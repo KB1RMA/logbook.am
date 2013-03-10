@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\DxSpots;
+use app\models\DxSpotsStats;
 use app\models\Callsigns;
 
 class DxSpotsController extends \lithium\action\Controller {
@@ -51,6 +52,26 @@ class DxSpotsController extends \lithium\action\Controller {
 		}
 
 		return compact('spots', 'callsign', 'totalSpots');
+
+	}
+
+	public function stats( $limit = 60 ) {
+
+		$stats = DxSpotsStats::find('all', array(
+			'limit' => $limit,
+			'order' => array('$natural' => -1 ),
+		));
+
+		$data = array();
+
+		foreach ( $stats as $key=>$stat ) {
+			$data[] = array($stat->minute->sec, $stat->stats->total);
+		}
+
+		$this->render(array(
+			'type' => 'json',
+			'data' => compact('data'),
+		));
 
 	}
 
