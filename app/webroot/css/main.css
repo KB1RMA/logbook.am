@@ -1,83 +1,3 @@
-/*
- * HTML5 Boilerplate
- *
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
- */
-
-/* ==========================================================================
-   Base styles: opinionated defaults
-   ========================================================================== */
-
-html,
-button,
-input,
-select,
-textarea {
-    color: #222;
-}
-
-body {
-    font-size: 1em;
-    line-height: 1.4;
-}
-
-/*
- * Remove text-shadow in selection highlight: h5bp.com/i
- * These selection declarations have to be separate.
- * Customize the background color to match your design.
- */
-
-::-moz-selection {
-    background: #b3d4fc;
-    text-shadow: none;
-}
-
-::selection {
-    background: #b3d4fc;
-    text-shadow: none;
-}
-
-/*
- * A better looking default horizontal rule
- */
-
-hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin: 1em 0;
-    padding: 0;
-}
-
-/*
- * Remove the gap between images and the bottom of their containers: h5bp.com/i/440
- */
-
-img {
-    vertical-align: middle;
-}
-
-/*
- * Remove default fieldset styles.
- */
-
-fieldset {
-    border: 0;
-    margin: 0;
-    padding: 0;
-}
-
-/*
- * Allow only vertical resizing of textareas.
- */
-
-textarea {
-    resize: vertical;
-}
-
 /* ==========================================================================
    Chrome Frame prompt
    ========================================================================== */
@@ -97,7 +17,6 @@ html { min-height: 100%; }
 body { 
 	background: #eee; 
 	font-family: 'Source Sans Pro', sans-serif;
-	min-width: 800px;
 }
 	body:before {
 		content: '';
@@ -112,25 +31,12 @@ body {
 
 input:focus { outline: 0; }
 input[type=text] {
-	height: 20px;
-	padding: 10px;
 	border: solid 1px #000;
 	-webkit-border-radius: 15px;
 					border-radius: 15px;
 	font-weight: 700;
 }
 
-dl {}
-	dt {
-		float: left;
-		width: 100px;
-		text-align: right;
-		clear: left;
-	}
-	dd {
-		float: left;
-		width: 50%;
-	}
 
 /* Top of page header crap */
 
@@ -147,7 +53,7 @@ body > header {
           box-shadow: 0px 0px 10px 0px #000;
 }
 	.header-container {
-		width: 70%;
+		width: 960px;
 		height: 100%; 
 		margin: 0 auto;
 		display: table;
@@ -163,10 +69,9 @@ body > header {
 		}
 		.header-container  #call-search input[type=text] {
 			margin-top: 10px;
-			height: 15px;
-			padding: 7px 17px;
 			width: 130px;
-			font-size: 1em;
+			padding-left: 15px;
+			padding-right: 15px;
 			-webkit-transition: width 0.3s ease-out; 
 				 -moz-transition: width 0.3s ease-out; 
 					 -o-transition: width 0.3s ease-out; 
@@ -187,10 +92,17 @@ body > header {
 							box-shadow: 0px 0px 10px 0px #000;
 		}
 			.header-container #callsign-results table {
+				width: 95%;
 				margin: 10px auto 40px auto;
+				background: transparent;
+				border: 0;
 			}
+				.header-container #callsign-results tr {
+					background: transparent;
+				}
 				.header-container #callsign-results td {
 					padding: 2px 5px;
+					color:#fff;
 				}
 					.header-container #callsign-results a {
 						text-decoration: none;
@@ -244,7 +156,7 @@ body > header {
 							margin-left: 10px;
 							position: relative;
 							display:-moz-inline-stack;
-							display:inline-block;
+							display:inline-block;	LOTW
 							zoom:1;
 							*display:inline;
 						}
@@ -262,7 +174,7 @@ body > header {
 								        box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
 								background: #fcfff4;
 								background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-								background: -moz-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+								background: -moz-linear-gradient(top, 	LOTW#fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
 								background: -o-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
 								background: -ms-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
 								background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
@@ -309,7 +221,7 @@ body > header {
 		position:absolute;
 		left: 50%;
 		width: 500px;
-		margin-left: -300px;
+		margin-left: -250px;
 		background: #fff;
 		padding: 50px;
 		text-align: center;
@@ -318,8 +230,6 @@ body > header {
 	}
 
 		#call-search input[type=text] {
-			width: 90%;
-			font-size: 1.4em;
 			font-weight: 700;
 			text-transform: uppercase;
 		}
@@ -327,9 +237,11 @@ body > header {
 			padding: 5px 10px;
 		}
 		.home #callsign-results table {
-			width: 90%;
+			width: 94%;
 			margin: 20px auto;
 			text-transform: capitalize;
+			border: 0;
+
 		}
 			.home #callsign-results table a { 
 				color: #000;
@@ -342,8 +254,7 @@ body > header {
 			}
 	.main-content {
 		background: #fff;
-		width: 70%;
-		margin: 110px auto 20px auto;
+		margin-top: 110px;
 		position: relative;
 		-webkit-box-shadow: 0 0 15px 0 rgba(0,0,0,.4);
 						box-shadow: 0 0 15px 0 rgba(0,0,0,.4);
@@ -397,22 +308,17 @@ body > header {
 			margin: 0;
 		}
 		.callsign {
-			margin:0 0 0 -40px;
+			margin-left:-40px;
 			font-weight: normal;
 			font-size: 6.25em;
 			line-height: 1em;
 			letter-spacing: -0.07em;
-			width: 50%;
-			float: left;
 		}
 		.postage-stamp {
-			background-color:#eee;
-			width: 48%;
-			padding: 20px 0;
 			position: relative;
 			font-size: 1.2em;
 			text-align: center;
-			margin: 1.8em -20px 10px 10px;
+			margin-top: 60px;
 		}
 			.postage-stamp .grey-title {
 				position:absolute;
@@ -424,10 +330,7 @@ body > header {
 				font-size: 0.8em;
 				color: #c9c9c9;
 			}
-		.general-info {
-			width: 48%;
-			float: left;
-		}
+		
 		#dx-cluster-spots { font-size: 0.6em; }
 			#dx-cluster-spots table { 
 				width: 90%;

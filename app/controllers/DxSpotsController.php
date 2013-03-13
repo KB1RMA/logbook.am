@@ -55,7 +55,7 @@ class DxSpotsController extends \lithium\action\Controller {
 
 	}
 
-	public function stats( $limit = 60 ) {
+	public function stats( $limit = 15 ) {
 
 		$stats = DxSpotsStats::find('all', array(
 			'limit' => $limit,

@@ -1,5 +1,5 @@
 <?php $this->title("DX Spot Live Statistics") ?>
-<div class="main-content">
+<div class="row main-content">
 	<h2 class="grey-title">Latest Stats</h2>
 	<div id="all-band-stats" style="width:100%;height:200px"></div>
 	<h2 class="grey-title">Last 50 Spots</h2>
@@ -29,6 +29,5 @@
 	</table>
 </div>
 
-<?php $this->scripts( $this->html->script('jquery.flot.js') ) ?>
+<?php $this->scripts( $this->html->script('vendor/jquery.flot.js') ) ?>
 <?php $this->scripts( $this->html->script('statplotting.js') ) ?>
-

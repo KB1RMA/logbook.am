@@ -3,7 +3,8 @@
 if (!$.support.transition)
 	$.fn.transition = $.fn.animate;
 
-(function (window, undefined) {
+;(function (window, undefined) {
+	'use strict'
 
 	/**
 	 * Prepare variables for use within scope
@@ -12,12 +13,14 @@ if (!$.support.transition)
 	var $ = window.jQuery, 
 	    $body = $('body'),
 	    $userSettingsDropdown = null,
+	    $userSettings = null,
 	    $useMyLocation = null,
 	    map_canvas = null,
 	    elevation_profile = null,
 	    polyline = null,
 	    callsignInformation = {}, 
 	    bounds = null,
+	    map = null,
 	    chart = null,
 	    elevation = null;
 
@@ -65,7 +68,7 @@ if (!$.support.transition)
 		retrieveSettings : function () {
 			var settings = new Object;
 			this.$form.find(':input').each( function() {
-				$element = $(this);
+				var $element = $(this);
 				if ( $element.is(':checked') )
 					settings[$element.attr('name')] = $element.val();
 				else 
@@ -76,8 +79,8 @@ if (!$.support.transition)
 
 		updateSettings : function() {
 			for ( var setting in this.settings ) {
-				$element = userPreferences.$form.find('[name="' + setting + '"]');
-				if ( userPreferences.settings[setting] !== "0"  )
+				var $element = userPreferences.$form.find('[name="' + setting + '"]');
+				if ( userPreferences.settings[setting] !== "0" )
 					$element.attr('checked', true);
 				else 
 					$element.attr('checked', false);
@@ -91,6 +94,7 @@ if (!$.support.transition)
 	 */
 
 	var autoComplete = {
+		
 		endPoint : '/callsigns/autocomplete',
 		results : null,
 		resultsTable : '',
@@ -263,6 +267,7 @@ if (!$.support.transition)
 	 */
 
 	var dxSpots = {
+
 		endPoint : '/dx_spots/call',
 		results : null,
 		callsign : null,

@@ -1,4 +1,4 @@
-<div class="main-content">
+<div class="row main-content">
 	<div class="profile-content clearfix">
 		<h1 class="callsign"><?= $callsign->callsign ?></h1>
 		<table style="width:90%;margin:0 auto">

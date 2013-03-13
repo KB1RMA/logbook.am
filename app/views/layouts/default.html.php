@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=600, initial-scale=1, maximum-scale=1">
 
 
-				<?php echo $this->html->style(array('debug', 'normalize', 'main')); ?>
+				<?php echo $this->html->style(array('debug', 'foundation/foundation', 'main')); ?>
         <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css' />
 				<link href='http://fonts.googleapis.com/css?family=Josefin+Sans:400,700' rel='stylesheet' type='text/css'>
 
@@ -42,6 +42,7 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
         <script type="text/javascript" src="//www.google.com/jsapi"></script>
+				<script src="/js/foundation/foundation.min.js"></script>
 				<script src="/js/plugins.js"></script>
         <script src="/js/main.js"></script>
 				<?= $this->scripts() ?>

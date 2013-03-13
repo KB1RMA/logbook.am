@@ -1,11 +1,12 @@
 ;(function () {
+	'use strict'
 
 	var $ = window.jQuery, 
 	    data = [],
 	    graph = null,
 	    options = { 
 				lines : {
-					lineWidth : 1,
+					lineWidth : 0,
 					color: '#000',
 					fill: true,
 					fillColor: 'rgba(59,162,169,.4)', 
