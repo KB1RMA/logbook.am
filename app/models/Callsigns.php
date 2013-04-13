@@ -3,6 +3,7 @@
 namespace app\models;
 
 use li3_geo\data\Geocoder;
+use lithium\analysis\Logger;
 
 class Callsigns extends \lithium\data\Model {
 
@@ -150,6 +151,10 @@ class Callsigns extends \lithium\data\Model {
 		$entity->geoCoordinates->source    = 'Google Geocoding API';
 
 		$entity->save();
+
+		// Write to the log so we know the call was geocoded
+		$logMessage = $entity->callsign . ' was geocoded via Google with the address: ' . $address;
+		Logger::write('info', $logMessage); 
 
 		return $location;
 

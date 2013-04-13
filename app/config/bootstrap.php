@@ -75,6 +75,12 @@ require __DIR__ . '/bootstrap/session.php';
  */
 // require __DIR__ . '/bootstrap/media.php';
 
+
+/**
+ * This file configures log files
+ */
+require __DIR__ . '/bootstrap/logs.php';
+
 /**
  * This file configures console filters and settings, specifically output behavior and coloring.
  */

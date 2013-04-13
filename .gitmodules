@@ -6,4 +6,4 @@
 	url = git@github.com:KB1RMA/dxcc.git
 [submodule "app/libraries/li3_geo"]
 	path = app/libraries/li3_geo
-	url = git@github.com:nateabele/li3_geo.git
+	url = git@github.com:KB1RMA/li3_geo.git

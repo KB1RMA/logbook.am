@@ -4,7 +4,6 @@ namespace app\controllers;
 
 
 use app\models\Callsigns;
-use app\models\Geocodes;
 
 class CallsignsController extends \lithium\action\Controller {
 
