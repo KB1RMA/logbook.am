@@ -120,6 +120,6 @@ Libraries::add('app', array('default' => true));
 /**
  * Add some plugins:
  */
-Libraries::add('Geocoder');
+Libraries::add('li3_geo');
 
 ?>

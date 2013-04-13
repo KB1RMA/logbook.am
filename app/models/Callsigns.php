@@ -2,7 +2,11 @@
 
 namespace app\models;
 
+use li3_geo\data\Geocoder;
+
 class Callsigns extends \lithium\data\Model {
+
+	protected $geoService = 'google';
 
 	protected $_schema = array(
 		'_id' => array('type' => 'id'),
@@ -138,25 +142,16 @@ class Callsigns extends \lithium\data\Model {
 				
 		}
 
-		$geocoder = new \Geocoder\Geocoder();
-		$adapter  = new \Geocoder\HttpAdapter\CurlHttpAdapter();
-	
-		try {
-			$geocode = $geocoder
-			             ->registerProvider(new \Geocoder\Provider\GoogleMapsProvider($adapter))
-			             ->geocode($address);
+		$location = Geocoder::find($this->geoService, array('address' => $address) )->coordinates();
 
-			$entity->geoCoordinates = new \stdClass();	
-			$entity->geoCoordinates->latitude  = $geocode->getLatitude();
-			$entity->geoCoordinates->longitude = $geocode->getLongitude();
-			$entity->geoCoordinates->source    = 'Google Geocoding API';
+		$entity->geoCoordinates = new \stdClass();	
+		$entity->geoCoordinates->latitude  = $location['latitude'];
+		$entity->geoCoordinates->longitude = $location['longitude'];
+		$entity->geoCoordinates->source    = 'Google Geocoding API';
 
-			$entity->save();
-		} catch (Exception $e) {
-			// suppress geocoder errors for now
-		}
+		$entity->save();
 
-		return;
+		return $location;
 
 	}
 

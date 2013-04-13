@@ -1,9 +1,9 @@
 [submodule "libraries/lithium"]
 	path = libraries/lithium
 	url = git://github.com/UnionOfRAD/lithium.git
-[submodule "app/libraries/_source/Geocoder"]
-	path = app/libraries/_source/Geocoder
-	url = git://github.com/willdurand/Geocoder.git
 [submodule "app/scripts/dxcc"]
 	path = app/scripts/dxcc
 	url = git@github.com:KB1RMA/dxcc.git
+[submodule "app/libraries/li3_geo"]
+	path = app/libraries/li3_geo
+	url = git@github.com:nateabele/li3_geo.git

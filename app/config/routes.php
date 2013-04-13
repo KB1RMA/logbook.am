@@ -62,10 +62,10 @@ Router::connect('/pages/{:args}', 'Pages::view');
  * core, as well as your own application and any other loaded plugins or frameworks. Browse to
  * [http://path/to/app/test](/test) to run tests.
  */
-if (!Environment::is('production')) {
+#if (!Environment::is('production')) {
 	Router::connect('/test/{:args}', array('controller' => 'lithium\test\Controller'));
 	Router::connect('/test', array('controller' => 'lithium\test\Controller'));
-}
+#}
 
 /**
  * ### Database object routes
