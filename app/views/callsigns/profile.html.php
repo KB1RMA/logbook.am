@@ -96,3 +96,5 @@
 	<?php endif ?>
 <?php endif ?>
 </div>
+
+<?php $this->scripts( $this->html->script('callprofile.js') ) ?>
