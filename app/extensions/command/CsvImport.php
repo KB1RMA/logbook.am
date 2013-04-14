@@ -57,8 +57,8 @@ class CsvImport extends \lithium\console\Command {
 				// Grab header from the first row
 				if ( $row == 1) {
 					$header = $data;
-					if ( in_array("callsign", $header ) ) {
-						$callsignIndex = array_search("callsign", $header);
+					if ( in_array("Callsign", $header ) ) {
+						$callsignIndex = array_search("Callsign", $header);
 					} else {
 						$this->out('You need to specify a callsign column!');
 						break;
@@ -80,7 +80,7 @@ class CsvImport extends \lithium\console\Command {
 						}	
 					}
 					
-					$criteria = array('callsign' => strtoupper($data[$callsignIndex]));
+					$criteria = array('Callsign' => strtoupper($data[$callsignIndex]));
 					$options = array('upsert' => true);					
 					$document = array('$set' => $callsign);
 					

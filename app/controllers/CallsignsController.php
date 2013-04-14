@@ -51,7 +51,7 @@ class CallsignsController extends \lithium\action\Controller {
 		
 		$callsign = Callsigns::first(array( 
 			'conditions' => array( 
-				'callsign' => $requestedCall,
+				'Callsign' => $requestedCall,
 			)
 		));
 
@@ -89,17 +89,17 @@ class CallsignsController extends \lithium\action\Controller {
 
 		$callsigns = Callsigns::find('all', array(
 			'fields' => array( 
-				'callsign', 
-				'person.givenName', 
-				'person.familyName', 
-				'address.locality', 
-				'address.region',
-				'address.addressCountry',
+				'Callsign', 
+				'Person.givenName', 
+				'Person.familyName', 
+				'Address.locality', 
+				'Address.region',
+				'Address.country',
 				'qslInfo.lotwLastActive' 
 			),
 			'limit'	=> '20',
 			'conditions' => array(
-				'callsign' =>	array(
+				'Callsign' =>	array(
 					'like' => '/^' . $partialCall . '/'),
 			)) 
 		);

@@ -9,13 +9,13 @@
 
 	<div class="row profile-content clearfix">
 		<div class="six columns">	
-			<h1 class="callsign"><?= $callsign->callsign ?></h1>
+			<h1 class="callsign"><?= $callsign->Callsign ?></h1>
 			<div class="general-info">
 				<h2 class="grey-title">General Information</h2>
 				<table>
-					<?php if (isset($callsign->uls)) : ?>
+					<?php if ( !empty($callsign->LicenseAuthority->licenseClass) ) : ?>
 					<tr>
-						<th>License Class</th><td><?= $callsign->uls->licenseClass ?></td>
+						<th>License Class</th><td><?= $callsign->LicenseAuthority->licenseClass ?></td>
 					</tr>
 					<?php endif ?>
 					<tr>
@@ -48,29 +48,31 @@
 
 			<div class="panel postage-stamp" itemscope itemtype="http://schema.org/Person">
 				<h2 class="grey-title">Postal Address</h2>
-			<?php if ( isset($callsign->person) ) : ?>
-				<strong><span itemprop="givenName"><?= $callsign->person->givenName ?></span
-				>&nbsp;<span itemprop="additionalName"><?= $callsign->person->additionalName ?></span
-				>&nbsp;<span itemprop="familyName"><?= $callsign->person->familyName ?></span></strong>
+			<?php if ( !empty($callsign->Person->givenName) ) : ?>
+				<strong><span itemprop="givenName"><?= $callsign->Person->givenName ?></span
+				>&nbsp;<span itemprop="additionalName"><?= $callsign->Person->additionalName ?></span
+				>&nbsp;<span itemprop="familyName"><?= $callsign->Person->familyName ?></span></strong>
+			<?php else : ?>
+				<?= $callsign->getFullName() ?>
 			<?php endif ?>
-				<div class="address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+				<div class="Address" itemprop="Address" itemscope itemtype="http://schema.org/PostalAddress">
 				<?php if ( $callsign->getFullAddress() ) : ?>
-					<?php if ( !empty($callsign->address->postOfficeBoxNumber) ) : ?>
-						P.O. Box&nbsp;<span itemprop="postOfficeBoxNumber"><?= $callsign->address->postOfficeBoxNumber ?></span><br>
+					<?php if ( !empty($callsign->Address->postOfficeBoxNumber) ) : ?>
+						P.O. Box&nbsp;<span itemprop="postOfficeBoxNumber"><?= $callsign->Address->postOfficeBoxNumber ?></span><br>
 					<?php else : ?>
-						<span itemprop="streetAddress"><?= $callsign->address->streetAddress ?></span><br>
+						<span itemprop="streetAddress"><?= $callsign->Address->streetAddress ?></span><br>
 					<?php endif ?>
-						<span itemprop="addressLocality"><?= $callsign->address->locality ?></span
-						>,&nbsp;<span itemprop="addressRegion"><?= $callsign->address->region ?></span
-						>&nbsp;<span itemprop="addressPostalCode"><?= $callsign->address->postalCode ?></span>
+						<span itemprop="AddressLocality"><?= $callsign->Address->locality ?></span
+						>,&nbsp;<span itemprop="AddressRegion"><?= $callsign->Address->region ?></span
+						>&nbsp;<span itemprop="AddressPostalCode"><?= $callsign->Address->postalCode ?></span>
 				<?php else : ?>
-					<p class="no-info"><em>No address information available</em></p>
+					<p class="no-info"><em>No Address information available</em></p>
 				<?php endif ?>
 				</div>	
 			</div>
 			<div class="panel postage-stamp">
 				<h2 class="grey-title">Spots</h2>
-				<div id="dx-cluster-spots" class="monospace" data-callsign="<?= $callsign->callsign ?>">
+				<div id="dx-cluster-spots" class="monospace" data-callsign="<?= $callsign->Callsign ?>">
 					<p class="no-info"><em>Loading spots...</em></p>
 				</div>
 			</div>

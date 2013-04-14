@@ -42,13 +42,13 @@ for line in fd.xreadlines():
     line = line.strip()
     fields = line.split("|")
     if records.has_key(fields[1]):
-        first, middle, last, Street, City, State, Zip, POBox, Atten, FRN = fields[8], fields[9], fields[10], fields[15], fields[16], fields[17], fields[18], fields[19], fields[20], fields[22]
+        entity, first, middle, last, Street, City, State, Zip, POBox, Atten, FRN = fields[7], fields[8], fields[9], fields[10], fields[15], fields[16], fields[17], fields[18], fields[19], fields[20], fields[22]
 
         # Removed for the time being. The full address can be built within the callsign model for more flexibility 
 				#if Street == "" and len(POBox) > 0:
         #    Street = "PO Box %s" % POBox
 
-        records[fields[1]]+=[first, middle, last, POBox, Street, City, State, Zip, Atten, FRN]
+        records[fields[1]]+=[entity, first, middle, last, POBox, Street, City, State, Zip, Atten, FRN]
 
 for record in records.keys():
     print ", ".join([ "\"%s\"" % field for field in records[record]])

@@ -11,45 +11,51 @@ class Callsigns extends \lithium\data\Model {
 
 	protected $_schema = array(
 		'_id' => array('type' => 'id'),
-		'callsign' => array('type' => 'string', 'null' => false),    
-		'person' => array('type' => 'object'),
-				'person.givenName' => array('type' => 'string'),
-				'person.additionalName' => array('type' => 'string'), 
-				'person.familyName' => array('type' => 'string'), 
-				'person.email' => array('type' => 'string'),
-				'person.birthDate' => array('type' => 'date'),
-				'person.website' => array('type' => 'string'),
-		'address' => array('type' => 'object'), 
-				'address.postOfficeBoxNumber' => array('type' => 'string'),
-				'address.streetAddress' => array('type' => 'string'),
-				'address.locality' => array('type' => 'string'),
-				'address.region' => array('type' => 'string'),
-				'address.country' => array('type' => 'string'),
-				'address.postalCode' => array('type' => 'string'),
-		'geoCoordinates' => array('type' => 'object'),
-				'geoCoordinates.elevation' => array('type' => 'integer', 'default' => 0),
-				'geoCoordinates.latitude' => array('type' => 'float'),
-				'geoCoordinates.longitude' => array('type' => 'float'),
-				'geoCoordinates.utcShift' => array('type' => 'float'),
-				'geoCoordinates.gridSquare' => array('type' => 'string'),
-				'geoCoordinates.continent' => array('type' => 'string'),
-				'geoCoordinates.ituZone' => array('type' => 'integer'),
-				'geoCoordinates.ituRegion' => array('type' => 'integer'),
-				'geoCoordinates.cqZone' => array('type' => 'integer'),
-				'geoCoordinates.arrlSection' => array('type' => 'string'),
-				'geoCoordinates.iota' => array('type' => 'string'),
-				'geoCoordinates.source' => array('type' => 'string'),
+		'Callsign' => array('type' => 'string', 'null' => false),    
+		'Person' => array('type' => 'object'),
+				'Person.givenName' => array('type' => 'string'),
+				'Person.additionalName' => array('type' => 'string'), 
+				'Person.familyName' => array('type' => 'string'), 
+				'Person.email' => array('type' => 'string'),
+				'Person.birthDate' => array('type' => 'date'),
+				'Person.website' => array('type' => 'string'),
+		'Address' => array('type' => 'object'), 
+				'Address.postOfficeBoxNumber' => array('type' => 'string'),
+				'Address.streetAddress' => array('type' => 'string'),
+				'Address.locality' => array('type' => 'string'),
+				'Address.region' => array('type' => 'string'),
+				'Address.country' => array('type' => 'string'),
+				'Address.postalCode' => array('type' => 'string'),
+		'GeoCoordinates' => array('type' => 'object'),
+				'GeoCoordinates.elevation' => array('type' => 'integer', 'default' => 0),
+				'GeoCoordinates.latitude' => array('type' => 'float'),
+				'GeoCoordinates.longitude' => array('type' => 'float'),
+				'GeoCoordinates.utcShift' => array('type' => 'float'),
+				'GeoCoordinates.gridSquare' => array('type' => 'string'),
+				'GeoCoordinates.continent' => array('type' => 'string'),
+				'GeoCoordinates.ituZone' => array('type' => 'integer'),
+				'GeoCoordinates.ituRegion' => array('type' => 'integer'),
+				'GeoCoordinates.cqZone' => array('type' => 'integer'),
+				'GeoCoordinates.wazZone' => array('type' => 'integer'),
+				'GeoCoordinates.arrlSection' => array('type' => 'string'),
+				'GeoCoordinates.iota' => array('type' => 'string'),
+				'GeoCoordinates.geosource' => array('type' => 'string'),
 		'qslInfo' => array('type' => 'object'),
 				'qslInfo.lotwLastActive' => array('type' => 'date'),
 				'qslInfo.eQSL' => array('type' => 'string'),
 				'qslInfo.direct' => array('type' => 'boolean'),
 				'qslInfo.buro' => array('type' => 'boolean'),
-				'qslInfo.manager' => array('type' => 'boolean'),
-		'uls' => array('type' => 'object'),
-				'uls.fileNumber' => array('type' => 'integer'),
-				'uls.frn' => array('type' => 'integer'),
-				'uls.licenseClass' => array('type' => 'string'),
-		'personalBio' => array('type' => 'string'),
+				'qslInfo.manager' => array('type' => 'string'),
+		'LicenseAuthority' => array('type' => 'object'),
+				'LicenseAuthority.authority' => array('type' => 'string'),
+				'LicenseAuthority.entityName' => array('type' => 'string'),
+				'LicenseAuthority.fileNumber' => array('type' => 'integer'),
+				'LicenseAuthority.frn' => array('type' => 'integer'),
+				'LicenseAuthority.licenseClass' => array('type' => 'string'),
+		'PersonalBio' => array('type' => 'string'),
+		'Location' => array('type' => 'object'),
+			'Location.lng' => array('type' => 'float'),
+			'Location.lat' => array('type' => 'float'),
 	);
 
 	public static function isValid( $callsign = '' ) {
@@ -72,61 +78,65 @@ class Callsigns extends \lithium\data\Model {
 	}
 
 	public function getFullName( $entity ) {
-		if ( empty($entity->person) )
-			return false;
+		if ( empty($entity->Person) ) {
+			if ( !empty( $entity->LicenseAuthority->entityName ) )
+				return $entity->LicenseAuthority->entityName;
+			else
+				return false;
+		}
 
-		return $entity->person->givenName . ' ' . $entity->person->additionalName . ' ' . $entity->person->familyName;
+		return $entity->Person->givenName . ' ' . $entity->Person->additionalName . ' ' . $entity->Person->familyName;
 	}
 	
 	public function getFullAddress( $entity ) {
-		if ( !isset($entity->address->locality) )
+		if ( !isset($entity->Address->locality) )
 			return false;
 
-		$street_address = ( empty( $entity->address->postOfficeBoxNumber ) ? $entity->address->streetAddress : 'PO Box ' . $entity->address->PostOfficeBoxNumber );
+		$street_Address = ( empty( $entity->Address->postOfficeBoxNumber ) ? $entity->Address->streetAddress : 'PO Box ' . $entity->Address->postOfficeBoxNumber );
 
-		return $street_address . ' ' . $entity->address->locality . ' ' . $entity->address->region;
+		return $street_Address . ' ' . $entity->Address->locality . ' ' . $entity->Address->region;
 	}
 
 	public function getLatitude( $entity ) {
-		if ( empty($entity->geoCoordinates->latitude) )
+		if ( empty($entity->GeoCoordinates->latitude) )
 			$entity->geocode();
 
-		return $entity->geoCoordinates->latitude;
+		return $entity->GeoCoordinates->latitude;
 	}
 
 	public function getLongitude( $entity ) {
-		if ( empty($entity->geoCoordinates->longitude) )
+		if ( empty($entity->GeoCoordinates->longitude) )
 			$entity->geocode();
 
-		return $entity->geoCoordinates->longitude;
+		return $entity->GeoCoordinates->longitude;
 	}
 
 	public function getItuZone( $entity ) {
-		if ( empty($entity->geoCoordinates->ituZone) )
+		if ( empty($entity->GeoCoordinates->ituZone) )
 			$entity->dxcc();
 
-		return $entity->geoCoordinates->ituZone;
+		return $entity->GeoCoordinates->ituZone;
 	}
 
 	public function getWazZone( $entity ) {
-		if ( empty($entity->geoCoordinates->wazZone) )
+		if ( empty($entity->GeoCoordinates->wazZone) )
 			$entity->dxcc();
 
-		return $entity->geoCoordinates->wazZone;
+		return $entity->GeoCoordinates->wazZone;
 	}
 
 	public function getContinent( $entity ) {
-		if ( empty($entity->geoCoordinates->continent) )
+		if ( empty($entity->GeoCoordinates->continent) )
 			$entity->dxcc();
 
-		return $entity->geoCoordinates->continent;
+		return $entity->GeoCoordinates->continent;
 	}
 
 	public function getCountry( $entity ) {
-		if ( empty($entity->address->addressCountry) )
+		if ( empty($entity->Address->country) )
 			$entity->dxcc();
 		
-		return $entity->address->addressCountry;
+		return $entity->Address->country;
 	}
 
 	public function geocode( $entity, $address = null ) {
@@ -134,29 +144,44 @@ class Callsigns extends \lithium\data\Model {
 		if (!$address) {
 			$address = trim($entity->getFullAddress());
 			
-			// If there's no address and one hasn't been specified, use DXCC
+			// If there's no Address and one hasn't been specified, use DXCC
 			// to find the country and geocode that
 			if (!$address) {
 				$entity->dxcc();	
-				$address = $entity->address->addressCountry;
+				$address = $entity->Address->country;
 			}
 				
 		}
 
-		$location = Geocoder::find($this->geoService, array('address' => $address) )->coordinates();
+		$location = Geocoder::find($this->geoService, array('address' => $address) );
 
-		$entity->geoCoordinates = new \stdClass();	
-		$entity->geoCoordinates->latitude  = $location['latitude'];
-		$entity->geoCoordinates->longitude = $location['longitude'];
-		$entity->geoCoordinates->source    = 'Google Geocoding API';
+		if ($location) { 
+			$location = $location->coordinates();
 
-		$entity->save();
+			$entity->GeoCoordinates = new \stdClass();	
+			$entity->GeoCoordinates->latitude  = $location['latitude'];
+			$entity->GeoCoordinates->longitude = $location['longitude'];
+			$entity->GeoCoordinates->geosource = 'Google Geocoding API';
 
-		// Write to the log so we know the call was geocoded
-		$logMessage = $entity->callsign . ' was geocoded via Google with the address: ' . $address;
-		Logger::write('info', $logMessage); 
+			// Set Location for our 2D index in Mongodb
+			$entity->Location = new \stdClass();	
+			$entity->Location->lat = $location['latitude'];
+			$entity->Location->lng = $location['longitude'];
 
-		return $location;
+			$entity->save();
+
+			// Write to the log so we know the call was geocoded
+			$logMessage = $entity->callsign . ' was geocoded via Google with the address: ' . $address;
+			Logger::write('info', $logMessage); 
+
+			return true;
+		}
+
+		// Record the failure
+		$logMessage = $entity->callsign . ' failed to geocode via Google with the address: ' . $address;
+		Logger::write('error', $logMessage); 
+
+		return false;
 
 	}
 
@@ -174,8 +199,8 @@ class Callsigns extends \lithium\data\Model {
 
 	public function getGridSquare( $entity, $force = false ) {
 
-		if ( !empty($entity->geoCoordinates->gridSquare) && !$force )
-			return $entity->geoCoordinates->gridSquare;
+		if ( !empty($entity->GeoCoordinates->gridSquare) && !$force )
+			return $entity->GeoCoordinates->gridSquare;
 
 		$grid = '';
 		$lat = $entity->getLatitude();
@@ -194,7 +219,7 @@ class Callsigns extends \lithium\data\Model {
 			$grid .= chr(ord('a') + intval(($lat - (intval($lat/1)*1)) / (2.5/60)));
 		}
 
-		$entity->geoCoordinates->gridSquare = $grid;
+		$entity->GeoCoordinates->gridSquare = $grid;
 		$entity->save();
 
 		return $grid;	
@@ -205,8 +230,7 @@ class Callsigns extends \lithium\data\Model {
 
 		// DXCC perl script path
 		$dxccPath = LITHIUM_APP_PATH . '/scripts/dxcc/dxcc ';
-
-		$output = shell_exec( $dxccPath . $entity->callsign );
+		$output = shell_exec( $dxccPath . $entity->Callsign );
 
 		$output = explode("\n", $output);
 		$output = array_filter($output);
@@ -217,15 +241,15 @@ class Callsigns extends \lithium\data\Model {
 		$parsed = array_filter($parsed);
 		
 		// Conform the output to our data schema
-		$conformed = array('source' => 'DXCC.pl');
+		$conformed = array('geosource' => 'DXCC.pl');
 
 		foreach($parsed as $key=>$value) {
 			switch($key) {
 				case 'WAZ Zone':
-					$conformed['wazZone'] = $value; 
+					$conformed['wazZone'] = intval($value); 
 					break;
 				case 'ITU Zone':
-					$conformed['ituZone'] = $value; 
+					$conformed['ituZone'] = intval($value); 
 					break;
 				case 'Continent':
 					$conformed['continent'] = $value; 
@@ -237,23 +261,35 @@ class Callsigns extends \lithium\data\Model {
 					$conformed['longitude'] = $value; 
 					break;
 				case 'Country Name':
-					if (!$entity->getFullAddress())
-						$entity->address = (Object) array( 'addressCountry' => $value );
-					else
-						$entity->address['addressCountry'] = $value;
+					$country = $value;
 					break;
 			}
 		}
-		
-		// Grab current Geo Data from model	
 
-		if (isset($entity->geoCoordinates->latitude))
-			$GeoCoordinates = (array)$entity->geoCoordinates;
+		if (is_object($entity->Address))
+			$entity->Address->country = $country;	
 		else
-			$GeoCoordinates = array();
+			$entity->Address = (Object) array('country'=>$country);	
+		
+		// Don't overwrite lat lng from geocoding if they exist
+		if (isset($entity->GeoCoordinates->latitude)) 
+			unset( $conformed['latitude'] );
 
-		// Merge new data from DXCC output with the current model's data
-		$entity->geoCoordinates = (Object)array_merge( $conformed, $GeoCoordinates );
+		if (isset($entity->GeoCoordinates->longitude)) 
+			unset( $conformed['longitude'] );
+
+
+		if (!method_exists($entity->GeoCoordinates, 'data')) {
+			$entity->GeoCoordinates = (Object) $conformed;
+			$entity->save();
+		} else {
+			$current = $entity->GeoCoordinates->data();
+			$merged = array_merge($current, $conformed);
+
+			foreach($merged as $key=>$value) {
+				$entity->GeoCoordinates[$key] = $value;
+			}
+		}
 
 		$entity->save();
 

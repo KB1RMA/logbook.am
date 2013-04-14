@@ -164,21 +164,21 @@ if (!$.support.transition)
 
 			// Loop through JSON containing results		
 			$.each(this.results.callsigns, function(i, result) {
-				if ( result.person  === undefined ) { result.person  = {}; }
-				if ( result.address === undefined ) { result.address = {}; }
+				if ( result.Person  === undefined ) { result.Person  = {}; }
+				if ( result.Address === undefined ) { result.Address = {}; }
 				if ( result.qslInfo === undefined ) { result.qslInfo = {}; }
 					
 				var address = '';
-				if ( result.address.locality === undefined )
-					address = result.address.addressCountry;	
+				if ( result.Address.locality === undefined )
+					address = result.Address.country;	
 				else
-					address = result.address.locality + ', ' + result.address.region;
+					address = result.Address.locality + ', ' + result.Address.region;
 
 				// Build results object
 				processed.push( {	
-					callsign   : result.callsign || '',
-					givenName  : result.person.givenName || '',
-					familyName : result.person.familyName || '',
+					callsign   : result.Callsign || '',
+					givenName  : result.Person.givenName || '',
+					familyName : result.Person.familyName || '',
 					address    : address || '',
 					lotw       : result.qslInfo.lotwLastActive || ''
 				});
@@ -251,6 +251,8 @@ if (!$.support.transition)
 				this.$resultsContainer.fadeOut(300);
 
 			this.resizeCallSearch();
+
+			return this;
 		}
 
 	} // End of autoComplete object
