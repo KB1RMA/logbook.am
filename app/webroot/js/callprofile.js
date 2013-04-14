@@ -104,16 +104,35 @@
 	}
 
 
-	function callProfileInit() {
-		// bring the map into scope
-		map = window.logbookMap;		
+	/**
+	 * General page initialization on document ready
+	 */
+
+	function init() {
 		elevation_profile = document.getElementById("elevation_profile");
 
 		// Find lat and lng on the page so we know where to center the map
-			var lat = $('#mapLat').html(),
-			    lng = $('#mapLng').html();
+		callsignInformation.lat = $('#mapLat').html(),
+		callsignInformation.lng = $('#mapLng').html();
 
-		callsignInformation.latLng = new google.maps.LatLng(lat, lng);
+		$('#show-elevation-profile').click(function() { createElevationProfile(); return false; });
+
+		// Initialize when the map has loaded
+		$window.bind('logbookmaploaded', mapInit);
+	}
+
+
+	/**
+	 * Anything on the callsign page that requires the map to be initialized
+	 * this is bound to the map initialization event
+	 */
+	
+	function mapInit() {
+
+		// bring the map into scope
+		map = window.logbookMap;		
+
+		callsignInformation.latLng = new google.maps.LatLng(callsignInformation.lat, callsignInformation.lng);
 
 		// Set marker
 		var marker = new google.maps.Marker({ map : map, position : callsignInformation.latLng });	
@@ -125,14 +144,8 @@
 		if ( userPreferences.settings['use-location'] !== "0" ) 
 			placeUserOnMap();
 
-		$('#show-elevation-profile').click(function() { createElevationProfile(); return false; });
 	}
 
-	$(document).ready(function() {
-		
-		// Initialize when the map has loaded
-		$window.bind('logbookmaploaded', callProfileInit);
-
-	});
+	$(document).ready(function() { init(); });
 
 })(window);
