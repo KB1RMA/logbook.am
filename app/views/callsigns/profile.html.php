@@ -53,7 +53,7 @@
 				>&nbsp;<span itemprop="additionalName"><?= $callsign->Person->additionalName ?></span
 				>&nbsp;<span itemprop="familyName"><?= $callsign->Person->familyName ?></span></strong>
 			<?php else : ?>
-				<?= $callsign->getFullName() ?>
+				<strong><?= $callsign->getFullName() ?></strong>
 			<?php endif ?>
 				<div class="Address" itemprop="Address" itemscope itemtype="http://schema.org/PostalAddress">
 				<?php if ( $callsign->getFullAddress() ) : ?>

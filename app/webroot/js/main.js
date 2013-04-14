@@ -399,7 +399,7 @@ if (!$.support.transition)
 		if ( typeof(map_canvas) != 'undefined' && map_canvas != null ) {
 			google.load("maps", "3", {
 				callback : mapInit,
-				"other_params" : "sensor=true"
+				"other_params" : "sensor=true&libraries=geometry"
 			});
 		}
 

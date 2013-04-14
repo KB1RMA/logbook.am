@@ -10,8 +10,8 @@ TMPCSV=./tmp/forimport.csv
 HEADER=LicenseAuthority.authority,LicenseAuthority.fileNumber,Callsign,LicenseAuthority.licenseClass,LicenseAuthority.entityName,Person.givenName,Person.additionalName,Person.familyName,Address.postOfficeBoxNumber,Address.streetAddress,Address.locality,Address.region,Address.postalCode,LicenseAuthority.attention,LicenseAuthority.frn
 
 # Download and unzip ULS
-wget -O ${STOREDIR}uls.latest.zip $ULS 
-unzip -o ${STOREDIR}uls.latest.zip -d $STOREDIR
+#wget -O ${STOREDIR}uls.latest.zip $ULS 
+#unzip -o ${STOREDIR}uls.latest.zip -d $STOREDIR
 
 # Use the haggalicious script to parse ULS data
 python uls_parse.py > $TMPCSV
@@ -22,3 +22,4 @@ sed -i 's/^/"FCC ULS" , /' $TMPCSV
 # Add header to the file
 sed -i "1i${HEADER}" $TMPCSV
 
+vi --run-command=":set nobomb, :set fileencoding=utf-8' $TMPCSV

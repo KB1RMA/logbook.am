@@ -40,6 +40,7 @@ class Callsigns extends \lithium\data\Model {
 				'GeoCoordinates.arrlSection' => array('type' => 'string'),
 				'GeoCoordinates.iota' => array('type' => 'string'),
 				'GeoCoordinates.geosource' => array('type' => 'string'),
+				'GeoCoordinates.lastGeocoded' => array('type' => 'date'),
 		'qslInfo' => array('type' => 'object'),
 				'qslInfo.lotwLastActive' => array('type' => 'date'),
 				'qslInfo.eQSL' => array('type' => 'string'),
@@ -56,6 +57,10 @@ class Callsigns extends \lithium\data\Model {
 		'Location' => array('type' => 'object'),
 			'Location.lng' => array('type' => 'float'),
 			'Location.lat' => array('type' => 'float'),
+	);
+
+	protected $_meta = array(
+		'key' => 'Callsign',
 	);
 
 	public static function isValid( $callsign = '' ) {
@@ -78,7 +83,7 @@ class Callsigns extends \lithium\data\Model {
 	}
 
 	public function getFullName( $entity ) {
-		if ( empty($entity->Person) ) {
+		if ( empty($entity->Person->givenName) ) {
 			if ( !empty( $entity->LicenseAuthority->entityName ) )
 				return $entity->LicenseAuthority->entityName;
 			else
@@ -158,27 +163,32 @@ class Callsigns extends \lithium\data\Model {
 		if ($location) { 
 			$location = $location->coordinates();
 
-			$entity->GeoCoordinates = new \stdClass();	
+			if ( !method_exists($entity->GeoCoordinates, 'data') )
+				$entity->GeoCoordinates = new \stdClass();	
+
 			$entity->GeoCoordinates->latitude  = $location['latitude'];
 			$entity->GeoCoordinates->longitude = $location['longitude'];
 			$entity->GeoCoordinates->geosource = 'Google Geocoding API';
+			$entity->GeoCoordinates->lastGeocoded = time();
 
 			// Set Location for our 2D index in Mongodb
-			$entity->Location = new \stdClass();	
+			if ( !method_exists($entity->Location, 'data') )
+				$entity->Location = new \stdClass();	
+
 			$entity->Location->lat = $location['latitude'];
 			$entity->Location->lng = $location['longitude'];
 
 			$entity->save();
 
 			// Write to the log so we know the call was geocoded
-			$logMessage = $entity->callsign . ' was geocoded via Google with the address: ' . $address;
+			$logMessage = $entity->Callsign . ' was geocoded via Google with the address: ' . $address;
 			Logger::write('info', $logMessage); 
 
 			return true;
 		}
 
 		// Record the failure
-		$logMessage = $entity->callsign . ' failed to geocode via Google with the address: ' . $address;
+		$logMessage = $entity->Callsign . ' FAILED to geocode via Google with the address: ' . $address;
 		Logger::write('error', $logMessage); 
 
 		return false;

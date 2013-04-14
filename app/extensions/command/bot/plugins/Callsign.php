@@ -55,12 +55,12 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 
 		$callsign = Callsigns::first(array( 
 			'conditions' => array( 
-				'callsign' => $requestedCall,
+				'Callsign' => $requestedCall,
 			)
 		));
 		$spot = DxSpots::first(array(
 			'conditions' => array(
-				'callsign' => $requestedCall,
+				'Callsign' => $requestedCall,
 			),
 			'order' => array('$natural' => -1 ),
 		));
@@ -85,10 +85,10 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 			return $response;
 		}
 
-		$response .= $callsign->callsign . ' - ';
+		$response .= $callsign->Callsign . ' - ';
 
-		if ( isset($callsign->uls) )
-			$response .= 'Class: ' . $callsign->uls->licenseClass . ' - ';
+		if ( !empty($callsign->LicenseAuthority->licenseClass) )
+			$response .= 'Class: ' . $callsign->LicenseAuthority->licenseClass . ' - ';
 
 		if ( $callsign->getFullName() )
 			$response .= $callsign->getFullName() . ' - ';
