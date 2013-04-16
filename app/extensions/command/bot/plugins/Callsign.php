@@ -53,11 +53,14 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 
 		$requestedCall = strtoupper(trim($callsigns[1]));
 
+		// Find the callsign
 		$callsign = Callsigns::first(array( 
 			'conditions' => array( 
 				'Callsign' => $requestedCall,
 			)
 		));
+
+		// Check if there are any spots for the callsign
 		$spot = DxSpots::first(array(
 			'conditions' => array(
 				'Callsign' => $requestedCall,
@@ -65,25 +68,100 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 			'order' => array('$natural' => -1 ),
 		));
 		
-		// If callsign is spotted
+		// If there are spots, build the message
 		$spotString = '';
 
 		if ( count($spot) ) {
 			$timeDifference = time() - $spot->time->sec;
 			$spotString = 'Spotted on ' . $spot->frequency . ' ';
 
-			if ($timeDifference > 60)
+			if ( $timeDifference > 60 )
 				$spotString .= ((integer)($timeDifference / 60)) . ' minutes ago';
 			else
 				$spotString .= $timeDifference . ' seconds ago';
 		}
 
+		// If there aren't any callsigns matching, let's see if we can find one similar
 		if ( !count($callsign) ) {
-			$response = String::insert($responses['notfound'], compact('requestedCall'));
-			if ($spotString)
-				$response .= ' but was ' . $spotString;
-			return $response;
+
+			// Let's only do this if the call contains both a letter and number
+			if (! preg_match('/[a-z]/i', $requestedCall) && ! preg_match('/[0-9]/', $requestedCall))
+				return 'try a bit more, om';
+
+			// Perform lookup w/ regex
+			$callsigns = Callsigns::find('all', array(
+				'fields' => array( 'Callsign' ),
+				'conditions' => array(
+					'Callsign' => array(
+						'like' => '/^' . $requestedCall . '/'
+					),
+				),
+			));
+			
+			// Determine if they're trying regex
+			if ( preg_match('/[\[\?\.]/', $requestedCall )) {
+				$hasRegex = true;	
+			} else {
+				$hasRegex = false;
+				$response = String::insert($responses['notfound'], compact('requestedCall'));
+			}
+
+			// Check if we've found anything
+			if ( count($callsigns) ) {
+
+				$total = count($callsigns);
+
+				// If there are more than 15 callsigns, get the fuck out
+				if ( $total > 15 )
+					return $response .= $total .' possibilities.';
+
+				if (!$hasRegex)
+					$response .= '. Could you have meant ';
+
+				$count = 0;
+				foreach ($callsigns as $call) {
+
+					// If there's only one call found, just output it's message
+					if ($total == 1)
+						return $this->callMessage($call);
+
+					// Comma between calls
+					if ($count)
+						$response .= ', '; 
+					
+					$response .= $call->Callsign;
+					$count++;
+				}
+
+				if (!$hasRegex)
+					$response .= '?';
+
+				return $response;
+			} else {
+
+				// If the call isn't found but it has been spotted
+				if ($spotString)
+					$response .= ' but was ' . $spotString;
+
+				return $response;
+			}
 		}
+
+		// If we found the callsign just output the message
+		$response .= $this->callMessage($callsign);
+
+		if ($spotString)
+			$response .= ' - ' . $spotString;
+
+		return $response;
+	}
+
+
+	/**
+	 * Generate the text for the callsign message
+	 */
+
+	private function callMessage( $callsign ) {
 
 		$response .= $callsign->Callsign . ' - ';
 
@@ -104,14 +182,7 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 		$response .= 'Lat: ' . $callsign->getLatitude() . ' - ';
 		$response .= 'Lng: ' . $callsign->getLongitude();
 
-		if ($spotString)
-			$response .= ' - ' . $spotString;
-
-		#$response .= 'http://lookup.logbook.am/call/' . $requestedCall;
-
-
 		return $response;
-	
 	}
 }
 
