@@ -99,7 +99,7 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 			));
 			
 			// Determine if they're trying regex
-			if ( preg_match('/[\[\?\.]/', $requestedCall )) {
+			if ( preg_match('/[\[\?\.\*]/', $requestedCall )) {
 				$hasRegex = true;	
 			} else {
 				$hasRegex = false;
@@ -121,7 +121,7 @@ class Callsign extends \app\extensions\command\bot\Plugin {
 				$count = 0;
 				foreach ($callsigns as $call) {
 
-					// If there's only one call found, just output it's message
+					// If there's only one call found, just output its message
 					if ($total == 1)
 						return $this->callMessage($call);
 
