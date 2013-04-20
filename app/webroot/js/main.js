@@ -19,7 +19,7 @@ if (!$.support.transition)
 		map_canvas = null,
 		map = null,
 		autoComplete = {},
-		userPreferences = {};
+		userPreferences = window.userPreferences;
 
 	/**
 	 * Object to save and retrieve various user preferences

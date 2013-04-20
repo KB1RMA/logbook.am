@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=600, initial-scale=1, maximum-scale=1">
 
 
-				<?php echo $this->html->style(array('debug', 'foundation/foundation', 'main')); ?>
+				<?php echo $this->html->style(array('debug', 'normalize', 'app')); ?>
         <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css' />
 				<link href='http://fonts.googleapis.com/css?family=Josefin+Sans:400,700' rel='stylesheet' type='text/css'>
 
@@ -46,7 +46,7 @@
 				<script src="/js/plugins.js"></script>
         <script src="/js/main.js"></script>
 				<?= $this->scripts() ?>
-				
+
 				<?= $this->_render('element', 'analytics') ?>
 
     </body>

@@ -26,6 +26,7 @@ class Callsigns extends \lithium\data\Model {
 				'Address.region' => array('type' => 'string'),
 				'Address.country' => array('type' => 'string'),
 				'Address.postalCode' => array('type' => 'string'),
+				'Address.county' => array('type' => 'string'),
 		'GeoCoordinates' => array('type' => 'object'),
 				'GeoCoordinates.elevation' => array('type' => 'integer', 'default' => 0),
 				'GeoCoordinates.latitude' => array('type' => 'float'),
@@ -164,7 +165,7 @@ class Callsigns extends \lithium\data\Model {
 			$location = $location->coordinates();
 
 			if ( !method_exists($entity->GeoCoordinates, 'data') )
-				$entity->GeoCoordinates = new \stdClass();	
+				$entity->GeoCoordinates = new \lithium\data\entity\Document;	
 
 			$entity->GeoCoordinates->latitude  = $location['latitude'];
 			$entity->GeoCoordinates->longitude = $location['longitude'];
@@ -173,7 +174,7 @@ class Callsigns extends \lithium\data\Model {
 
 			// Set Location for our 2D index in Mongodb
 			if ( !method_exists($entity->Location, 'data') )
-				$entity->Location = new \stdClass();	
+				$entity->Location = new \lithium\data\entity\Document;	
 
 			$entity->Location->lat = $location['latitude'];
 			$entity->Location->lng = $location['longitude'];
@@ -251,7 +252,6 @@ class Callsigns extends \lithium\data\Model {
 		$parsed = array_filter($parsed);
 		
 		// Conform the output to our data schema
-		$conformed = array('geosource' => 'DXCC.pl');
 
 		foreach($parsed as $key=>$value) {
 			switch($key) {

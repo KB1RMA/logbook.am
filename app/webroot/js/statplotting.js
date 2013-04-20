@@ -1,21 +1,21 @@
 ;(function () {
 	'use strict'
 
-	var $ = window.jQuery, 
+	var $ = window.jQuery,
 	    data = [],
 	    graph = null,
-	    options = { 
+	    options = {
 				lines : {
 					lineWidth : 0,
 					color: '#000',
 					fill: true,
-					fillColor: 'rgba(59,162,169,.4)', 
+					fillColor: 'rgba(59,162,169,.4)',
 				}
 			};
 
 	function plotData ( receivedData ) {
 		data = receivedData.data;
-		
+
 		graph = $.plot('#all-band-stats', [data], options );
 
 	}
@@ -32,8 +32,8 @@
 	}
 
 	$(document).ready(function() {
-	
-		retrieveData();	
+
+		retrieveData();
 
 		setInterval(function() {
 			retrieveData();

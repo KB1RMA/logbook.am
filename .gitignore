@@ -1,4 +1,5 @@
 .DS_Store
 app/resources/tmp/*
 app/scripts/import/*/tmp/*
+app/webroot/.sass-cache
 .*.sw[op]

@@ -2,7 +2,7 @@
 	'use strict'
 
 
-	var 
+	var
 		$ = window.jQuery,
 		$window = $(window),
 		elevationService = null,
@@ -13,7 +13,6 @@
 		elevations = null,
 		callsignInformation = {},
 		google = window.google,
-		userPreferences = window.userPreferences,
 		navigator = window.navigator,
 		map = null;
 
@@ -27,7 +26,7 @@
 				if (polyline) {
 					polyline.setMap(null);
 				}
-				
+
 				polyline = new google.maps.Polyline({
 					path: [ userPreferences.latLng, callsignInformation.latLng ],
 					strokeColor: "#000000",
@@ -67,7 +66,7 @@
 		elevationService = new google.maps.ElevationService();
 
 		// combine user and callsign latLng objects
-		
+
 		if (userPreferences.latLng === undefined || userPreferences.latLng === null) {
 			if (confirm('We need your location. Would you like to find it now?')) {
 				placeUserOnMap(createElevationProfile);
@@ -75,7 +74,7 @@
 
 			return;
 		}
-		
+
 		var latLngs = [ userPreferences.latLng, callsignInformation.latLng ];
 
 		elevationService.getElevationAlongPath({
@@ -83,7 +82,7 @@
 			samples: 256
 		}, plotElevation);
 	}
-	
+
 
 	/**
 	 * Takes an array of ElevationResult objects, draws the path on the map
@@ -92,7 +91,7 @@
 
 	function plotElevation(results) {
 		elevations = results;
-		 
+
 		var
 			data = new google.visualization.DataTable(),
 			i;
@@ -115,6 +114,29 @@
 
 
 	/**
+	 * Anything on the callsign page that requires the map to be initialized
+	 * this is bound to the map initialization event
+	 */
+
+	function mapInit() {
+
+		// bring the map into scope
+		map = window.logbookMap;
+
+		callsignInformation.latLng = new google.maps.LatLng(callsignInformation.lat, callsignInformation.lng);
+
+		// Set marker
+		var marker = new google.maps.Marker({ map : map, position : callsignInformation.latLng });
+
+		// add marker to Maps bounds
+		bounds = new google.maps.LatLngBounds();
+		bounds.extend(callsignInformation.latLng);
+
+		placeUserOnMap();
+
+	}
+
+	/**
 	 * General page initialization on document ready
 	 */
 
@@ -122,40 +144,15 @@
 		elevation_profile = document.getElementById("elevation_profile");
 
 		// Find lat and lng on the page so we know where to center the map
-		callsignInformation.lat = $('#mapLat').html(),
+		callsignInformation.lat = $('#mapLat').html();
 		callsignInformation.lng = $('#mapLng').html();
 
-		$('#show-elevation-profile').click(function() { createElevationProfile(); return false; });
+		$('#show-elevation-profile').click(function () { createElevationProfile(); return false; });
 
 		// Initialize when the map has loaded
 		$window.bind('logbookmaploaded', mapInit);
 	}
 
-
-	/**
-	 * Anything on the callsign page that requires the map to be initialized
-	 * this is bound to the map initialization event
-	 */
-	
-	function mapInit() {
-
-		// bring the map into scope
-		map = window.logbookMap;		
-
-		callsignInformation.latLng = new google.maps.LatLng(callsignInformation.lat, callsignInformation.lng);
-
-		// Set marker
-		var marker = new google.maps.Marker({ map : map, position : callsignInformation.latLng });	
-		
-		// add marker to Maps bounds
-		bounds = new google.maps.LatLngBounds();
-		bounds.extend(callsignInformation.latLng);
-
-		if ( userPreferences.settings['use-location'] !== "0" ) 
-			placeUserOnMap();
-
-	}
-
-	$(document).ready(function() { init(); });
+	$(document).ready(function () { init(); });
 
 })(window);

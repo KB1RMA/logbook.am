@@ -38,7 +38,7 @@
 				});
 				console.log(element_count);
 			});
-	}		
+	}
 
 	function centerMapOnUser() {
 		if (navigator.geolocation) {
@@ -53,15 +53,15 @@
 	function creeperInit() {
 		// bring the map into scope
 		map = window.logbookMap;
-		
+
 		centerMapOnUser();
 
 		google.maps.event.addListener(map, 'idle', doTheCreep);
-		
+
 	}
 
 	$(function () {
-		
+
 		// Initialize when the map has loaded
 		$window.bind('logbookmaploaded', creeperInit);
 

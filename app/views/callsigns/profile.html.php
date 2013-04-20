@@ -25,6 +25,8 @@
 					</tr><tr>
 						<th>Longitude: </th><td><span id="mapLng"><?=$callsign->getLongitude()?></span></td>	
 					</tr><tr>
+						<th>County: </th><td><?=$callsign->Address->county?></td>	
+					</tr><tr>
 						<th>ITU Zone: </th><td><?=$callsign->getItuZone()?></span></td>	
 					</tr><tr>
 						<th>WAZ Zone: </th><td><?=$callsign->getWazZone()?></span></td>	
