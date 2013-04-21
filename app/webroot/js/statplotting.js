@@ -1,44 +1,44 @@
 ;(function () {
-	'use strict'
+  'use strict'
 
-	var $ = window.jQuery,
-	    data = [],
-	    graph = null,
-	    options = {
-				lines : {
-					lineWidth : 0,
-					color: '#000',
-					fill: true,
-					fillColor: 'rgba(59,162,169,.4)',
-				}
-			};
+  var $ = window.jQuery,
+      data = [],
+      graph = null,
+      options = {
+        lines : {
+          lineWidth : 0,
+          color: '#000',
+          fill: true,
+          fillColor: 'rgba(59,162,169,.4)',
+        }
+      };
 
-	function plotData ( receivedData ) {
-		data = receivedData.data;
+  function plotData ( receivedData ) {
+    data = receivedData.data;
 
-		graph = $.plot('#all-band-stats', [data], options );
+    graph = $.plot('#all-band-stats', [data], options );
 
-	}
+  }
 
-	function retrieveData () {
+  function retrieveData () {
 
-		$.ajax({
-				url: '/dx_spots/stats',
-				type: 'POST',
-				dataType: 'json',
-				success: plotData
-		});
+    $.ajax({
+        url: '/dx_spots/stats',
+        type: 'POST',
+        dataType: 'json',
+        success: plotData
+    });
 
-	}
+  }
 
-	$(document).ready(function() {
+  $(document).ready(function() {
 
-		retrieveData();
+    retrieveData();
 
-		setInterval(function() {
-			retrieveData();
-		}, 5000);
+    setInterval(function() {
+      retrieveData();
+    }, 5000);
 
-	});
+  });
 
 })();

@@ -2,13 +2,13 @@
 <div class="row main-content callProfile">
 <?php if ( $callsign ) : ?>
 
-	<div id="map_canvas"></div>	
+	<div id="map_canvas"></div>
 	<a href="javascript:;" id="show-elevation-profile">Elevation Profile</a>
 	<div id="elevation_profile"></div>
 	<div id="use-my-location" title="Enable your location on the map">My Location</div>
 
 	<div class="row profile-content clearfix">
-		<div class="six columns">	
+		<div class="large-6 columns">
 			<h1 class="callsign"><?= $callsign->Callsign ?></h1>
 			<div class="general-info">
 				<h2 class="grey-title">General Information</h2>
@@ -21,21 +21,21 @@
 					<tr>
 						<th>GridSquare</th><td><?= $callsign->getGridSquare() ?></td>
 					</tr><tr>
-						<th>Latitude: </th><td><span id="mapLat"><?=$callsign->getLatitude()?></span></td>	
+						<th>Latitude: </th><td><span id="mapLat"><?=$callsign->getLatitude()?></span></td>
 					</tr><tr>
-						<th>Longitude: </th><td><span id="mapLng"><?=$callsign->getLongitude()?></span></td>	
+						<th>Longitude: </th><td><span id="mapLng"><?=$callsign->getLongitude()?></span></td>
 					</tr><tr>
-						<th>County: </th><td><?=$callsign->Address->county?></td>	
+						<th>County: </th><td><?=$callsign->Address->county?></td>
 					</tr><tr>
-						<th>ITU Zone: </th><td><?=$callsign->getItuZone()?></span></td>	
+						<th>ITU Zone: </th><td><?=$callsign->getItuZone()?></span></td>
 					</tr><tr>
-						<th>WAZ Zone: </th><td><?=$callsign->getWazZone()?></span></td>	
+						<th>WAZ Zone: </th><td><?=$callsign->getWazZone()?></span></td>
 					</tr><tr>
-						<th>Continent: </th><td><?=$callsign->getContinent()?></span></td>	
+						<th>Continent: </th><td><?=$callsign->getContinent()?></span></td>
 					</tr><tr>
-						<th>Country: </th><td><?=$callsign->getCountry()?></span></td>	
+						<th>Country: </th><td><?=$callsign->getCountry()?></span></td>
 					</tr><tr>
-						<th>LOTW Active?</th><td><?= $callsign->lotwIsActive() ?></td>	
+						<th>LOTW Active?</th><td><?= $callsign->lotwIsActive() ?></td>
 					</tr>
 					<?php if (!empty($callsign->qslInfo->lotwLastActive)) :?>
 					<tr>
@@ -46,7 +46,7 @@
 			</div>
 		</div>
 
-		<div class="six columns">	
+		<div class="large-6 columns">
 
 			<div class="panel postage-stamp" itemscope itemtype="http://schema.org/Person">
 				<h2 class="grey-title">Postal Address</h2>
@@ -70,7 +70,7 @@
 				<?php else : ?>
 					<p class="no-info"><em>No Address information available</em></p>
 				<?php endif ?>
-				</div>	
+				</div>
 			</div>
 			<div class="panel postage-stamp">
 				<h2 class="grey-title">Spots</h2>

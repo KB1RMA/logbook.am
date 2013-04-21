@@ -5804,12 +5804,8 @@ body > header {
   opacity: 1;
 }
 
-/**
- * Custom CSS3 Buttons found here:
- * http://cssdeck.com/labs/css-checkbox-styles
- */
 /* Main body stuff */
-/* line 253, ../sass/app.scss */
+/* line 248, ../sass/app.scss */
 .main-content #call-search {
   position: absolute;
   left: 50%;
@@ -5819,39 +5815,36 @@ body > header {
   padding: 50px;
   text-align: center;
   -webkit-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
 }
 
-/* line 266, ../sass/app.scss */
+/* line 260, ../sass/app.scss */
 #call-search input[type=text] {
   font-weight: 700;
   text-transform: uppercase;
 }
-/* line 270, ../sass/app.scss */
-#call-search #callsign-find {
-  padding: 5px 10px;
-}
 
-/* line 275, ../sass/app.scss */
+/* line 266, ../sass/app.scss */
 .home #callsign-results table {
   width: 94%;
   margin: 20px auto;
   text-transform: capitalize;
   border: 0;
 }
-/* line 280, ../sass/app.scss */
+/* line 271, ../sass/app.scss */
 .home #callsign-results table a {
   color: #000;
   text-decoration: none;
   padding: 2px 0;
   display: block;
 }
-/* line 286, ../sass/app.scss */
+/* line 277, ../sass/app.scss */
 .home #callsign-results table tr:hover td {
   background: #eee;
 }
 
-/* line 291, ../sass/app.scss */
+/* line 282, ../sass/app.scss */
 .main-content {
   background: #fff;
   margin-top: 110px;
@@ -5862,15 +5855,14 @@ body > header {
 }
 
 /* Callsign profile styling */
-/* line 300, ../sass/app.scss */
+/* line 292, ../sass/app.scss */
 .callProfile #map_canvas {
   width: 100%;
   height: 350px;
   z-index: 2;
 }
-
-/* line 306, ../sass/app.scss */
-#use-my-location {
+/* line 298, ../sass/app.scss */
+.callProfile #use-my-location {
   display: none;
   z-index: 1;
   position: absolute;
@@ -5886,17 +5878,16 @@ body > header {
   -o-transition: right 0.1s ease-out;
   transition: right 0.1s ease-out;
 }
-/* line 307, ../sass/app.scss */
-#use-my-location.enabled {
+/* line 299, ../sass/app.scss */
+.callProfile #use-my-location.enabled {
   display: block;
 }
-/* line 321, ../sass/app.scss */
-#use-my-location:hover, #use-my-location.active {
+/* line 313, ../sass/app.scss */
+.callProfile #use-my-location:hover, .callProfile #use-my-location.active {
   right: -50px;
 }
-
-/* line 326, ../sass/app.scss */
-#show-elevation-profile {
+/* line 318, ../sass/app.scss */
+.callProfile #show-elevation-profile {
   display: block;
   z-index: 1;
   position: absolute;
@@ -5908,92 +5899,151 @@ body > header {
   text-indent: -999em;
   cursor: pointer;
 }
-
-/* line 339, ../sass/app.scss */
-.profile-content {
+/* line 331, ../sass/app.scss */
+.callProfile .profile-content {
   padding: 0 50px 50px 50px;
   position: relative;
   overflow: hidden;
 }
-
-/* line 345, ../sass/app.scss */
-.grey-title {
+/* line 336, ../sass/app.scss */
+.callProfile .profile-content .grey-title {
   color: #bbb;
   font-weight: normal;
   margin: 0;
 }
-
-/* line 351, ../sass/app.scss */
-.callsign {
+/* line 342, ../sass/app.scss */
+.callProfile .profile-content .callsign {
   margin-left: -40px;
   font-weight: normal;
   font-size: 6.25em;
   line-height: 1em;
   letter-spacing: -0.07em;
 }
-
-/* line 359, ../sass/app.scss */
-.postage-stamp {
+/* line 350, ../sass/app.scss */
+.callProfile .profile-content .postage-stamp {
   position: relative;
   font-size: 1.2em;
   text-align: center;
   margin-top: 60px;
 }
-/* line 364, ../sass/app.scss */
-.postage-stamp .grey-title {
+/* line 355, ../sass/app.scss */
+.callProfile .profile-content .postage-stamp .grey-title {
   position: absolute;
   margin: 0;
   top: -1em;
   left: 0;
 }
-
-/* line 372, ../sass/app.scss */
-.no-info {
+/* line 365, ../sass/app.scss */
+.callProfile .no-info {
   font-size: 0.8em;
   color: #c9c9c9;
 }
-
-/* line 377, ../sass/app.scss */
-#dx-cluster-spots {
+/* line 370, ../sass/app.scss */
+.callProfile #dx-cluster-spots {
   font-size: 0.6em;
 }
-/* line 379, ../sass/app.scss */
-#dx-cluster-spots table {
+/* line 372, ../sass/app.scss */
+.callProfile #dx-cluster-spots table {
   width: 90%;
   margin: 10px auto;
 }
 
-/* line 385, ../sass/app.scss */
+/* line 380, ../sass/app.scss */
 body > footer {
+  padding-top: 20px;
   padding-bottom: 20px;
 }
 
-/* line 389, ../sass/app.scss */
+/* line 385, ../sass/app.scss */
 .left {
   float: left;
 }
 
-/* line 393, ../sass/app.scss */
+/* line 386, ../sass/app.scss */
 .right {
   float: right;
 }
 
-/* line 397, ../sass/app.scss */
+/* line 387, ../sass/app.scss */
 .no-margin {
   margin: 0;
 }
 
-/* line 401, ../sass/app.scss */
+/* line 388, ../sass/app.scss */
 .text-center {
   text-align: center;
 }
 
-/* line 405, ../sass/app.scss */
+/* line 390, ../sass/app.scss */
 .josefin {
   font-family: 'Josefin Sans', sans-serif;
 }
 
-/* line 409, ../sass/app.scss */
+/* line 391, ../sass/app.scss */
 .monospace {
   font-family: "Lucida Console", Monaco, monospace;
+}
+
+/*
+ * Image replacement
+ */
+/* line 397, ../sass/app.scss */
+.ir {
+  background-color: transparent;
+  border: 0;
+  overflow: hidden;
+  /* IE 6/7 fallback */
+  *text-indent: -9999px;
+}
+/* line 403, ../sass/app.scss */
+.ir:before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 150%;
+}
+
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+/* line 415, ../sass/app.scss */
+.hidden {
+  display: none !important;
+  visibility: hidden;
+}
+
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+/* line 424, ../sass/app.scss */
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+/* line 434, ../sass/app.scss */
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+/*
+ * Hide visually and from screenreaders, but maintain layout
+ */
+/* line 454, ../sass/app.scss */
+.invisible {
+  visibility: hidden;
 }

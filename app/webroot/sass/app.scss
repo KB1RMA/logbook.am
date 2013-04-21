@@ -243,11 +243,6 @@ body > header {
   }
 }
 
-/**
- * Custom CSS3 Buttons found here:
- * http://cssdeck.com/labs/css-checkbox-styles
- */
-
 /* Main body stuff */
 
 .main-content #call-search {
@@ -258,17 +253,13 @@ body > header {
   background: #fff;
   padding: 50px;
   text-align: center;
-  -webkit-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
-  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
+  @include box-shadow(0 0 15px 0 rgba(0, 0, 0, 0.4));
 }
 
 #call-search {
   input[type=text] {
     font-weight: 700;
     text-transform: uppercase;
-  }
-  #callsign-find {
-    padding: 5px 10px;
   }
 }
 
@@ -297,115 +288,169 @@ body > header {
 
 /* Callsign profile styling */
 
-.callProfile #map_canvas {
-  width: 100%;
-  height: 350px;
-  z-index: 2;
-}
+.callProfile {
+	& #map_canvas {
+		width: 100%;
+		height: 350px;
+		z-index: 2;
+	}
 
-#use-my-location {
-  &.enabled {
-    display: block;
-  }
-  display: none;
-  z-index: 1;
-  position: absolute;
-  background: white url(../img/mylocation.png) right center no-repeat;
-  width: 50px;
-  height: 50px;
-  right: -20px;
-  top: 40px;
-  text-indent: -999em;
-  cursor: pointer;
-  @include transition(right 0.1s ease-out);
-  &:hover, &.active {
-    right: -50px;
-  }
-}
+	& #use-my-location {
+		&.enabled {
+			display: block;
+		}
+		display: none;
+		z-index: 1;
+		position: absolute;
+		background: white url(../img/mylocation.png) right center no-repeat;
+		width: 50px;
+		height: 50px;
+		right: -20px;
+		top: 40px;
+		text-indent: -999em;
+		cursor: pointer;
+		@include transition(right 0.1s ease-out);
+		&:hover, &.active {
+			right: -50px;
+		}
+	}
 
-#show-elevation-profile {
-  display: block;
-  z-index: 1;
-  position: absolute;
-  background: white url(../img/mylocation.png) right center no-repeat;
-  width: 50px;
-  height: 50px;
-  right: -20px;
-  top: 100px;
-  text-indent: -999em;
-  cursor: pointer;
-}
+	& #show-elevation-profile {
+		display: block;
+		z-index: 1;
+		position: absolute;
+		background: white url(../img/mylocation.png) right center no-repeat;
+		width: 50px;
+		height: 50px;
+		right: -20px;
+		top: 100px;
+		text-indent: -999em;
+		cursor: pointer;
+	}
 
-.profile-content {
-  padding: 0 50px 50px 50px;
-  position: relative;
-  overflow: hidden;
-}
+	& .profile-content {
+		padding: 0 50px 50px 50px;
+		position: relative;
+		overflow: hidden;
 
-.grey-title {
-  color: #bbb;
-  font-weight: normal;
-  margin: 0;
-}
+		& .grey-title {
+			color: #bbb;
+			font-weight: normal;
+			margin: 0;
+		}
 
-.callsign {
-  margin-left: -40px;
-  font-weight: normal;
-  font-size: 6.25em;
-  line-height: 1em;
-  letter-spacing: -0.07em;
-}
+		& .callsign {
+			margin-left: -40px;
+			font-weight: normal;
+			font-size: 6.25em;
+			line-height: 1em;
+			letter-spacing: -0.07em;
+		}
 
-.postage-stamp {
-  position: relative;
-  font-size: 1.2em;
-  text-align: center;
-  margin-top: 60px;
-  .grey-title {
-    position: absolute;
-    margin: 0;
-    top: -1em;
-    left: 0;
-  }
-}
+		& .postage-stamp {
+			position: relative;
+			font-size: 1.2em;
+			text-align: center;
+			margin-top: 60px;
+			& .grey-title {
+				position: absolute;
+				margin: 0;
+				top: -1em;
+				left: 0;
+			}
+		}
 
-.no-info {
-  font-size: 0.8em;
-  color: #c9c9c9;
-}
+	}
 
-#dx-cluster-spots {
-  font-size: 0.6em;
-  table {
-    width: 90%;
-    margin: 10px auto;
-  }
+	.no-info {
+		font-size: 0.8em;
+		color: #c9c9c9;
+	}
+
+	#dx-cluster-spots {
+		font-size: 0.6em;
+		& table {
+			width: 90%;
+			margin: 10px auto;
+		}
+	}
+
 }
 
 body > footer {
+	padding-top: 20px;
   padding-bottom: 20px;
 }
 
-.left {
-  float: left;
+.left { float: left; }
+.right { float: right; }
+.no-margin { margin: 0; }
+.text-center { text-align: center; }
+
+.josefin { font-family: 'Josefin Sans', sans-serif; }
+.monospace { font-family: "Lucida Console", Monaco, monospace; }
+
+/*
+ * Image replacement
+ */
+
+.ir {
+  background-color: transparent;
+  border: 0;
+  overflow: hidden;
+  /* IE 6/7 fallback */
+  *text-indent: -9999px;
+  &:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 150%;
+  }
 }
 
-.right {
-  float: right;
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+
+.hidden {
+  display: none !important;
+  visibility: hidden;
 }
 
-.no-margin {
-  margin: 0;
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  &.focusable {
+    &:active, &:focus {
+      clip: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      position: static;
+      width: auto;
+    }
+  }
 }
 
-.text-center {
-  text-align: center;
-}
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
 
-.josefin {
-  font-family: 'Josefin Sans', sans-serif;
-}
+/*
+ * Hide visually and from screenreaders, but maintain layout
+ */
 
-.monospace {
-  font-family: "Lucida Console", Monaco, monospace;
+.invisible {
+  visibility: hidden;
 }

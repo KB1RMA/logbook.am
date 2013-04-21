@@ -1,158 +1,158 @@
 (function (window, undefined) {
-	'use strict'
+  'use strict'
 
 
-	var
-		$ = window.jQuery,
-		$window = $(window),
-		elevationService = null,
-		elevation_profile = null,
-		polyline = null,
-		bounds = null,
-		chart = null,
-		elevations = null,
-		callsignInformation = {},
-		google = window.google,
-		navigator = window.navigator,
-		map = null;
+  var
+    $ = window.jQuery,
+    $window = $(window),
+    elevationService = null,
+    elevation_profile = null,
+    polyline = null,
+    bounds = null,
+    chart = null,
+    elevations = null,
+    callsignInformation = {},
+    google = window.google,
+    navigator = window.navigator,
+    map = null;
 
-	function placeUserOnMap(callback) {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function (position) {
-				userPreferences.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-				var marker = new google.maps.Marker({ map : map, position : userPreferences.latLng });
+  function placeUserOnMap(callback) {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        userPreferences.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        var marker = new google.maps.Marker({ map : map, position : userPreferences.latLng });
 
-				// Put a line on the map between user and callsign
-				if (polyline) {
-					polyline.setMap(null);
-				}
+        // Put a line on the map between user and callsign
+        if (polyline) {
+          polyline.setMap(null);
+        }
 
-				polyline = new google.maps.Polyline({
-					path: [ userPreferences.latLng, callsignInformation.latLng ],
-					strokeColor: "#000000",
-					map: map});
+        polyline = new google.maps.Polyline({
+          path: [ userPreferences.latLng, callsignInformation.latLng ],
+          strokeColor: "#000000",
+          map: map});
 
-				// Zoom the map out to show user and callsign
-				bounds.extend(userPreferences.latLng);
-				map.fitBounds(bounds);
-				setTimeout(callback, 200);
-			});
-		}
-	}
-
-
-	/**
-	 * Load the Visualization API and the piechart package.
-	 */
-	function loadVisualizations(callback) {
-		google.load("visualization", "1", {
-			callback : callback,
-			packages: ["columnchart"]
-		});
-	}
-
-	/**
-	 * Elevation profile between user location and callsign
-	 */
-
-	function createElevationProfile() {
-
-		if (google.visualization === undefined) {
-			loadVisualizations(createElevationProfile);
-			return;
-		}
-
-		chart = new google.visualization.ColumnChart(elevation_profile);
-		elevationService = new google.maps.ElevationService();
-
-		// combine user and callsign latLng objects
-
-		if (userPreferences.latLng === undefined || userPreferences.latLng === null) {
-			if (confirm('We need your location. Would you like to find it now?')) {
-				placeUserOnMap(createElevationProfile);
-			}
-
-			return;
-		}
-
-		var latLngs = [ userPreferences.latLng, callsignInformation.latLng ];
-
-		elevationService.getElevationAlongPath({
-			path: latLngs,
-			samples: 256
-		}, plotElevation);
-	}
+        // Zoom the map out to show user and callsign
+        bounds.extend(userPreferences.latLng);
+        map.fitBounds(bounds);
+        setTimeout(callback, 200);
+      });
+    }
+  }
 
 
-	/**
-	 * Takes an array of ElevationResult objects, draws the path on the map
-	 * and plots the elevation profile on a GViz ColumnChart
-	 */
+  /**
+   * Load the Visualization API and the piechart package.
+   */
+  function loadVisualizations(callback) {
+    google.load("visualization", "1", {
+      callback : callback,
+      packages: ["columnchart"]
+    });
+  }
 
-	function plotElevation(results) {
-		elevations = results;
+  /**
+   * Elevation profile between user location and callsign
+   */
 
-		var
-			data = new google.visualization.DataTable(),
-			i;
+  function createElevationProfile() {
 
-		data.addColumn('string', 'Sample');
-		data.addColumn('number', 'Elevation');
+    if (google.visualization === undefined) {
+      loadVisualizations(createElevationProfile);
+      return;
+    }
 
-		for (i = 0; i < results.length; i = i + 1) {
-			data.addRow(['', elevations[i].elevation]);
-		}
+    chart = new google.visualization.ColumnChart(elevation_profile);
+    elevationService = new google.maps.ElevationService();
 
-		elevation_profile.style.display = 'block';
-		chart.draw(data, {
-			height: 200,
-			legend: 'none',
-			titleY: 'Elevation (m)',
-			focusBorderColor: '#00ff00'
-		});
-	}
+    // combine user and callsign latLng objects
+
+    if (userPreferences.latLng === undefined || userPreferences.latLng === null) {
+      if (confirm('We need your location. Would you like to find it now?')) {
+        placeUserOnMap(createElevationProfile);
+      }
+
+      return;
+    }
+
+    var latLngs = [ userPreferences.latLng, callsignInformation.latLng ];
+
+    elevationService.getElevationAlongPath({
+      path: latLngs,
+      samples: 256
+    }, plotElevation);
+  }
 
 
-	/**
-	 * Anything on the callsign page that requires the map to be initialized
-	 * this is bound to the map initialization event
-	 */
+  /**
+   * Takes an array of ElevationResult objects, draws the path on the map
+   * and plots the elevation profile on a GViz ColumnChart
+   */
 
-	function mapInit() {
+  function plotElevation(results) {
+    elevations = results;
 
-		// bring the map into scope
-		map = window.logbookMap;
+    var
+      data = new google.visualization.DataTable(),
+      i;
 
-		callsignInformation.latLng = new google.maps.LatLng(callsignInformation.lat, callsignInformation.lng);
+    data.addColumn('string', 'Sample');
+    data.addColumn('number', 'Elevation');
 
-		// Set marker
-		var marker = new google.maps.Marker({ map : map, position : callsignInformation.latLng });
+    for (i = 0; i < results.length; i = i + 1) {
+      data.addRow(['', elevations[i].elevation]);
+    }
 
-		// add marker to Maps bounds
-		bounds = new google.maps.LatLngBounds();
-		bounds.extend(callsignInformation.latLng);
+    elevation_profile.style.display = 'block';
+    chart.draw(data, {
+      height: 200,
+      legend: 'none',
+      titleY: 'Elevation (m)',
+      focusBorderColor: '#00ff00'
+    });
+  }
 
-		placeUserOnMap();
 
-	}
+  /**
+   * Anything on the callsign page that requires the map to be initialized
+   * this is bound to the map initialization event
+   */
 
-	/**
-	 * General page initialization on document ready
-	 */
+  function mapInit() {
 
-	function init() {
-		elevation_profile = document.getElementById("elevation_profile");
+    // bring the map into scope
+    map = window.logbookMap;
 
-		// Find lat and lng on the page so we know where to center the map
-		callsignInformation.lat = $('#mapLat').html();
-		callsignInformation.lng = $('#mapLng').html();
+    callsignInformation.latLng = new google.maps.LatLng(callsignInformation.lat, callsignInformation.lng);
 
-		$('#show-elevation-profile').click(function () { createElevationProfile(); return false; });
+    // Set marker
+    var marker = new google.maps.Marker({ map : map, position : callsignInformation.latLng });
 
-		// Initialize when the map has loaded
-		$window.bind('logbookmaploaded', mapInit);
-	}
+    // add marker to Maps bounds
+    bounds = new google.maps.LatLngBounds();
+    bounds.extend(callsignInformation.latLng);
 
-	$(document).ready(function () { init(); });
+    placeUserOnMap();
+
+  }
+
+  /**
+   * General page initialization on document ready
+   */
+
+  function init() {
+    elevation_profile = document.getElementById("elevation_profile");
+
+    // Find lat and lng on the page so we know where to center the map
+    callsignInformation.lat = $('#mapLat').html();
+    callsignInformation.lng = $('#mapLng').html();
+
+    $('#show-elevation-profile').click(function () { createElevationProfile(); return false; });
+
+    // Initialize when the map has loaded
+    $window.bind('logbookmaploaded', mapInit);
+  }
+
+  $(document).ready(function () { init(); });
 
 })(window);
