@@ -1,17 +1,17 @@
-<?php $placeholder = ( isset($callsign) ? $callsign->callsign : '' ); ?>
+<?php $placeholder = ( isset($callsign) ? $callsign->callsign : 'Enter a callsign' ); ?>
 <div id="call-search">
-<?= $this->form->create( null, array( 
-	'url' => array( 
-		'controller' 	=> 'callsigns', 
-		'action' 			=> 'profile' ), 
+<?= $this->form->create( null, array(
+	'url' => array(
+		'controller' 	=> 'callsigns',
+		'action' 			=> 'profile' ),
 	'method' 	=> 'POST',
-	'id' 	=> 'callsign-entry' 
+	'id' 	=> 'callsign-entry'
 )) ?>
 	<?= $this->form->text('callsign', array(
-	'id' => 'callsign-input', 
+	'id' => 'callsign-input',
 	'autocomplete' => 'off',
 	'placeholder' => $placeholder,
-	)) 
+	))
 	?>
 <?= $this->form->end() ?>
 	<div id="callsign-results">
