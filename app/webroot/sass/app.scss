@@ -48,12 +48,12 @@
 $dropShadow : 0px 0px 10px 0px #000;
 
 html {
-  min-height: 100%;
 }
 
 body {
   background: #eee;
   font-family: 'Source Sans Pro', sans-serif;
+	position: relative;
   &:before {
     content: '';
     position: fixed;
@@ -96,6 +96,7 @@ body > header {
   height: 100%;
   margin: 0 auto;
   display: table;
+	min-height: 100%;
   position: relative;
   z-index: 2;
   #call-search {
@@ -115,6 +116,7 @@ body > header {
     }
   }
   #callsign-results {
+		& #map_canvas { width: 100%; height: 500px; }
     position: absolute;
     top: 50px;
     left: 40px;
@@ -145,11 +147,11 @@ body > header {
       color: #ff6f27;
     }
   }
+
+	& .loading { height: 50px; width: 55px }
 }
 
-/* Header callsign search box */
 
-/* Header callsign results input */
 
 #clock {
   font-size: .8em;
@@ -243,62 +245,45 @@ body > header {
   }
 }
 
-/* Main body stuff */
-
-.main-content #call-search {
-  position: absolute;
-  left: 50%;
-  width: 500px;
-  margin-left: -250px;
-  background: #fff;
-  padding: 50px;
-  text-align: center;
-  @include box-shadow(0 0 15px 0 rgba(0, 0, 0, 0.4));
-}
-
-#call-search {
-  input[type=text] {
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-}
-
 .home #callsign-results table {
-  width: 94%;
-  margin: 20px auto;
-  text-transform: capitalize;
-  border: 0;
-  a {
-    color: #000;
-    text-decoration: none;
-    padding: 2px 0;
-    display: block;
-  }
-  tr:hover td {
-    background: #eee;
-  }
+	width: 94%;
+	margin: 20px auto;
+	text-transform: capitalize;
+	border: 0;
+	a {
+		color: #000;
+		text-decoration: none;
+		padding: 2px 0;
+		display: block;
+	}
+	tr:hover td { background: #eee; }
 }
 
+/* Main body stuff */
 .main-content {
   background: #fff;
   margin-top: 110px;
   position: relative;
   @include box-shadow(0 0 15px 0 rgba(0, 0, 0, 0.4));
+
+	& #call-search {
+		position: absolute;
+		left: 50%;
+		width: 500px;
+		margin-left: -250px;
+		background: #fff;
+		padding: 50px;
+		text-align: center;
+		@include box-shadow(0 0 15px 0 rgba(0, 0, 0, 0.4));
+		input[type=text] { font-weight: 700; text-transform: uppercase; }
+	}
 }
 
 /* Callsign profile styling */
 
 .callProfile {
-	& #map_canvas {
-		width: 100%;
-		height: 350px;
-		z-index: 2;
-	}
-
+	& #map_canvas { width: 100%; height: 350px; z-index: 2; }
 	& #use-my-location {
-		&.enabled {
-			display: block;
-		}
 		display: none;
 		z-index: 1;
 		position: absolute;
@@ -310,9 +295,9 @@ body > header {
 		text-indent: -999em;
 		cursor: pointer;
 		@include transition(right 0.1s ease-out);
-		&:hover, &.active {
-			right: -50px;
-		}
+
+		&.enabled { display: block; }
+		&:hover, &.active { right: -50px; }
 	}
 
 	& #show-elevation-profile {
@@ -332,6 +317,11 @@ body > header {
 		padding: 0 50px 50px 50px;
 		position: relative;
 		overflow: hidden;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+
 
 		& .grey-title {
 			color: #bbb;
@@ -352,6 +342,7 @@ body > header {
 			font-size: 1.2em;
 			text-align: center;
 			margin-top: 60px;
+
 			& .grey-title {
 				position: absolute;
 				margin: 0;
@@ -359,7 +350,6 @@ body > header {
 				left: 0;
 			}
 		}
-
 	}
 
 	.no-info {
@@ -374,7 +364,23 @@ body > header {
 			margin: 10px auto;
 		}
 	}
+}
 
+/* Ham Creeper styles */
+
+.ham-creeper {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	padding-top: 50px;
+
+	& #map_canvas {
+		width: 100%;
+		height: 100%;
+    background: #3ba2a9;
+	}
 }
 
 body > footer {
@@ -382,8 +388,6 @@ body > footer {
   padding-bottom: 20px;
 }
 
-.left { float: left; }
-.right { float: right; }
 .no-margin { margin: 0; }
 .text-center { text-align: center; }
 
