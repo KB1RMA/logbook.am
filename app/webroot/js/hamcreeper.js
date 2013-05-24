@@ -23,8 +23,8 @@
             ne = bounds.getNorthEast(),
             proximitymeters = google.maps.geometry.spherical.computeDistanceBetween(sw, ne),
             center = bounds.getCenter(),
-            centerLat = center.hb,
-            centerLng = center.ib,
+            centerLat = center.lat(),
+            centerLng = center.lng(),
             ajaxOptions = {
                 type     : 'GET',
                 url      : '/ham-creeper/find',
