@@ -1,4 +1,4 @@
-<?php $placeholder = ( isset($callsign) ? $callsign->callsign : 'Enter a callsign' ); ?>
+<?php $placeholder = ( isset($callsign) ? $callsign->Callsign : 'Enter a callsign' ); ?>
 <div id="call-search">
 <?= $this->form->create( null, array(
 	'url' => array(

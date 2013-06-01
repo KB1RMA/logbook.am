@@ -5563,15 +5563,11 @@ table tfoot tr td {
   max-width: 800px;
 }
 
-/* line 50, ../sass/app.scss */
-html {
-  min-height: 100%;
-}
-
-/* line 54, ../sass/app.scss */
+/* line 53, ../sass/app.scss */
 body {
   background: #eee;
   font-family: 'Source Sans Pro', sans-serif;
+  position: relative;
 }
 /* line 57, ../sass/app.scss */
 body:before {
@@ -5622,17 +5618,18 @@ body > header {
   height: 100%;
   margin: 0 auto;
   display: table;
+  min-height: 100%;
   position: relative;
   z-index: 2;
 }
-/* line 101, ../sass/app.scss */
+/* line 102, ../sass/app.scss */
 .header-container #call-search {
   display: table-cell;
   vertical-align: middle;
   float: left;
   margin-left: 40px;
 }
-/* line 106, ../sass/app.scss */
+/* line 107, ../sass/app.scss */
 .header-container #call-search input[type=text] {
   margin-top: 10px;
   width: 130px;
@@ -5643,11 +5640,11 @@ body > header {
   -o-transition: width 0.3s ease-out;
   transition: width 0.3s ease-out;
 }
-/* line 112, ../sass/app.scss */
+/* line 113, ../sass/app.scss */
 .header-container #call-search input[type=text]:focus {
   width: 320px;
 }
-/* line 117, ../sass/app.scss */
+/* line 118, ../sass/app.scss */
 .header-container #callsign-results {
   position: absolute;
   top: 50px;
@@ -5660,23 +5657,28 @@ body > header {
   -moz-box-shadow: 0px 0px 10px 0px black;
   box-shadow: 0px 0px 10px 0px black;
 }
-/* line 126, ../sass/app.scss */
+/* line 119, ../sass/app.scss */
+.header-container #callsign-results #map_canvas {
+  width: 100%;
+  height: 500px;
+}
+/* line 128, ../sass/app.scss */
 .header-container #callsign-results table {
   width: 95%;
   margin: 10px auto 40px auto;
   background: transparent;
   border: 0;
 }
-/* line 132, ../sass/app.scss */
+/* line 134, ../sass/app.scss */
 .header-container #callsign-results tr {
   background: transparent;
 }
-/* line 135, ../sass/app.scss */
+/* line 137, ../sass/app.scss */
 .header-container #callsign-results td {
   padding: 2px 5px;
   color: #fff;
 }
-/* line 139, ../sass/app.scss */
+/* line 141, ../sass/app.scss */
 .header-container #callsign-results a {
   text-decoration: none;
   color: #fff;
@@ -5685,21 +5687,24 @@ body > header {
   -o-transition: color 0.1s ease-out;
   transition: color 0.1s ease-out;
 }
-/* line 144, ../sass/app.scss */
+/* line 146, ../sass/app.scss */
 .header-container #callsign-results tr:hover a {
   color: #ff6f27;
 }
+/* line 151, ../sass/app.scss */
+.header-container .loading {
+  height: 50px;
+  width: 55px;
+}
 
-/* Header callsign search box */
-/* Header callsign results input */
-/* line 154, ../sass/app.scss */
+/* line 156, ../sass/app.scss */
 #clock {
   font-size: .8em;
   line-height: 50px;
   margin-right: 40px;
 }
 
-/* line 160, ../sass/app.scss */
+/* line 162, ../sass/app.scss */
 #user-settings {
   position: relative;
   height: 50px;
@@ -5708,12 +5713,12 @@ body > header {
   opacity: .7;
   background: url(../img/settings.png) center center no-repeat;
 }
-/* line 167, ../sass/app.scss */
+/* line 169, ../sass/app.scss */
 #user-settings:hover {
   opacity: 1;
 }
 
-/* line 172, ../sass/app.scss */
+/* line 174, ../sass/app.scss */
 #user-settings-dropdown {
   position: absolute;
   top: -999px;
@@ -5728,14 +5733,14 @@ body > header {
   box-shadow: 0px 0px 10px 0px black;
 }
 
-/* line 185, ../sass/app.scss */
+/* line 187, ../sass/app.scss */
 #settings-list ul {
   list-style: none;
   padding: 0;
   margin: 0 20px;
   text-align: right;
 }
-/* line 191, ../sass/app.scss */
+/* line 193, ../sass/app.scss */
 #settings-list .inputContainer {
   width: 20px;
   height: 20px;
@@ -5746,7 +5751,7 @@ body > header {
   zoom: 1;
   *display: inline;
 }
-/* line 200, ../sass/app.scss */
+/* line 202, ../sass/app.scss */
 #settings-list .inputContainer label {
   cursor: pointer;
   position: absolute;
@@ -5770,7 +5775,7 @@ body > header {
   background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfff4', endColorstr='#b3bead',GradientType=0 );
 }
-/* line 216, ../sass/app.scss */
+/* line 218, ../sass/app.scss */
 #settings-list .inputContainer label:after {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
@@ -5791,21 +5796,49 @@ body > header {
   -o-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
-/* line 232, ../sass/app.scss */
+/* line 234, ../sass/app.scss */
 #settings-list .inputContainer label:hover::after {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
   filter: alpha(opacity=30);
   opacity: 0.5;
 }
-/* line 238, ../sass/app.scss */
+/* line 240, ../sass/app.scss */
 #settings-list .inputContainer input[type=checkbox]:checked + label:after {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   filter: alpha(opacity=100);
   opacity: 1;
 }
 
-/* Main body stuff */
 /* line 248, ../sass/app.scss */
+.home #callsign-results table {
+  width: 94%;
+  margin: 20px auto;
+  text-transform: capitalize;
+  border: 0;
+}
+/* line 253, ../sass/app.scss */
+.home #callsign-results table a {
+  color: #000;
+  text-decoration: none;
+  padding: 2px 0;
+  display: block;
+}
+/* line 259, ../sass/app.scss */
+.home #callsign-results table tr:hover td {
+  background: #eee;
+}
+
+/* Main body stuff */
+/* line 263, ../sass/app.scss */
+.main-content {
+  background: #fff;
+  margin-top: 110px;
+  position: relative;
+  -webkit-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
+}
+/* line 269, ../sass/app.scss */
 .main-content #call-search {
   position: absolute;
   left: 50%;
@@ -5818,50 +5851,20 @@ body > header {
   -moz-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
 }
-
-/* line 260, ../sass/app.scss */
-#call-search input[type=text] {
+/* line 278, ../sass/app.scss */
+.main-content #call-search input[type=text] {
   font-weight: 700;
   text-transform: uppercase;
 }
 
-/* line 266, ../sass/app.scss */
-.home #callsign-results table {
-  width: 94%;
-  margin: 20px auto;
-  text-transform: capitalize;
-  border: 0;
-}
-/* line 271, ../sass/app.scss */
-.home #callsign-results table a {
-  color: #000;
-  text-decoration: none;
-  padding: 2px 0;
-  display: block;
-}
-/* line 277, ../sass/app.scss */
-.home #callsign-results table tr:hover td {
-  background: #eee;
-}
-
-/* line 282, ../sass/app.scss */
-.main-content {
-  background: #fff;
-  margin-top: 110px;
-  position: relative;
-  -webkit-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
-  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.4);
-}
-
 /* Callsign profile styling */
-/* line 292, ../sass/app.scss */
+/* line 285, ../sass/app.scss */
 .callProfile #map_canvas {
   width: 100%;
   height: 350px;
   z-index: 2;
 }
-/* line 298, ../sass/app.scss */
+/* line 286, ../sass/app.scss */
 .callProfile #use-my-location {
   display: none;
   z-index: 1;
@@ -5882,11 +5885,11 @@ body > header {
 .callProfile #use-my-location.enabled {
   display: block;
 }
-/* line 313, ../sass/app.scss */
+/* line 300, ../sass/app.scss */
 .callProfile #use-my-location:hover, .callProfile #use-my-location.active {
   right: -50px;
 }
-/* line 318, ../sass/app.scss */
+/* line 303, ../sass/app.scss */
 .callProfile #show-elevation-profile {
   display: block;
   z-index: 1;
@@ -5899,19 +5902,23 @@ body > header {
   text-indent: -999em;
   cursor: pointer;
 }
-/* line 331, ../sass/app.scss */
+/* line 316, ../sass/app.scss */
 .callProfile .profile-content {
   padding: 0 50px 50px 50px;
   position: relative;
   overflow: hidden;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
-/* line 336, ../sass/app.scss */
+/* line 326, ../sass/app.scss */
 .callProfile .profile-content .grey-title {
   color: #bbb;
   font-weight: normal;
   margin: 0;
 }
-/* line 342, ../sass/app.scss */
+/* line 332, ../sass/app.scss */
 .callProfile .profile-content .callsign {
   margin-left: -40px;
   font-weight: normal;
@@ -5919,67 +5926,74 @@ body > header {
   line-height: 1em;
   letter-spacing: -0.07em;
 }
-/* line 350, ../sass/app.scss */
+/* line 340, ../sass/app.scss */
 .callProfile .profile-content .postage-stamp {
   position: relative;
   font-size: 1.2em;
   text-align: center;
   margin-top: 60px;
 }
-/* line 355, ../sass/app.scss */
+/* line 346, ../sass/app.scss */
 .callProfile .profile-content .postage-stamp .grey-title {
   position: absolute;
   margin: 0;
   top: -1em;
   left: 0;
 }
-/* line 365, ../sass/app.scss */
+/* line 355, ../sass/app.scss */
 .callProfile .no-info {
   font-size: 0.8em;
   color: #c9c9c9;
 }
-/* line 370, ../sass/app.scss */
+/* line 360, ../sass/app.scss */
 .callProfile #dx-cluster-spots {
   font-size: 0.6em;
 }
-/* line 372, ../sass/app.scss */
+/* line 362, ../sass/app.scss */
 .callProfile #dx-cluster-spots table {
   width: 90%;
   margin: 10px auto;
 }
 
-/* line 380, ../sass/app.scss */
+/* Ham Creeper styles */
+/* line 371, ../sass/app.scss */
+.ham-creeper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 50px;
+}
+/* line 379, ../sass/app.scss */
+.ham-creeper #map_canvas {
+  width: 100%;
+  height: 100%;
+  background: #3ba2a9;
+}
+
+/* line 386, ../sass/app.scss */
 body > footer {
   padding-top: 20px;
   padding-bottom: 20px;
 }
 
-/* line 385, ../sass/app.scss */
-.left {
-  float: left;
-}
-
-/* line 386, ../sass/app.scss */
-.right {
-  float: right;
-}
-
-/* line 387, ../sass/app.scss */
+/* line 391, ../sass/app.scss */
 .no-margin {
   margin: 0;
 }
 
-/* line 388, ../sass/app.scss */
+/* line 392, ../sass/app.scss */
 .text-center {
   text-align: center;
 }
 
-/* line 390, ../sass/app.scss */
+/* line 394, ../sass/app.scss */
 .josefin {
   font-family: 'Josefin Sans', sans-serif;
 }
 
-/* line 391, ../sass/app.scss */
+/* line 395, ../sass/app.scss */
 .monospace {
   font-family: "Lucida Console", Monaco, monospace;
 }
@@ -5987,7 +6001,7 @@ body > footer {
 /*
  * Image replacement
  */
-/* line 397, ../sass/app.scss */
+/* line 401, ../sass/app.scss */
 .ir {
   background-color: transparent;
   border: 0;
@@ -5995,7 +6009,7 @@ body > footer {
   /* IE 6/7 fallback */
   *text-indent: -9999px;
 }
-/* line 403, ../sass/app.scss */
+/* line 407, ../sass/app.scss */
 .ir:before {
   content: "";
   display: block;
@@ -6006,7 +6020,7 @@ body > footer {
 /*
  * Hide from both screenreaders and browsers: h5bp.com/u
  */
-/* line 415, ../sass/app.scss */
+/* line 419, ../sass/app.scss */
 .hidden {
   display: none !important;
   visibility: hidden;
@@ -6015,7 +6029,7 @@ body > footer {
 /*
  * Hide only visually, but have it available for screenreaders: h5bp.com/v
  */
-/* line 424, ../sass/app.scss */
+/* line 428, ../sass/app.scss */
 .visuallyhidden {
   border: 0;
   clip: rect(0 0 0 0);
@@ -6026,7 +6040,7 @@ body > footer {
   position: absolute;
   width: 1px;
 }
-/* line 434, ../sass/app.scss */
+/* line 438, ../sass/app.scss */
 .visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
   clip: auto;
   height: auto;
@@ -6043,7 +6057,7 @@ body > footer {
 /*
  * Hide visually and from screenreaders, but maintain layout
  */
-/* line 454, ../sass/app.scss */
+/* line 458, ../sass/app.scss */
 .invisible {
   visibility: hidden;
 }

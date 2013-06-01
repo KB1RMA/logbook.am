@@ -9,7 +9,7 @@ class DxSpots extends \lithium\data\Model {
 
 	protected $_schema = array(
 		'_id' => array('type' => 'id'),
-		'callsign' => array('type' => 'string', 'null' => false),    
+		'callsign' => array('type' => 'string', 'null' => false),
     'frequency' => array('type' => 'float'),
     'comment' => array('type' => 'string'),
     'time' => array('type' => 'date'),
@@ -55,22 +55,22 @@ Filters::apply('app\models\DxSpots', 'save', function($self, $params, $chain ) {
 				$entity->band = '10';
 				break;
 		}
-		
+
 		$entity->frequency = $frequency;
 		$params['entity'] = $entity;
-			
+
 	}
 
 	$nearestMinute = round(time()/60) * 60;
 
 	$criteria = array('minute' => $nearestMinute);
-	$options = array('upsert' => true);					
+	$options = array('upsert' => true);
 	$document = array('$inc' => array(
 		'stats.total' => 1,
 		'stats.' . $entity->band => 1,
 	));
-	
-	DxSpotsStats::update($document, $criteria, $options); 
+
+	DxSpotsStats::update($document, $criteria, $options);
 
 	$response = $chain->next($self, $params, $chain);
 
